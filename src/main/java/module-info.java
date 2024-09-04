@@ -7,6 +7,7 @@ module com.automobileapp.sotame {
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
+    requires java.sql;
 
     opens com.automobileapp.sotame to javafx.fxml;
     opens com.automobileapp.sotame.models to javafx.base;

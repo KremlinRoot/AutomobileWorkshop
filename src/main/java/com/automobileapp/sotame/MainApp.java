@@ -1,5 +1,6 @@
 package com.automobileapp.sotame;
 
+import com.automobileapp.sotame.database.DatabaseManager;
 import com.automobileapp.sotame.views.EmployeeListView;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -25,6 +26,7 @@ public class MainApp extends Application {
         scene class is container of all elements (content).
         root element of main scene is mainStackPane.
          */
+        DatabaseManager.initializeDatabase();
         BorderPane mainLayout = new BorderPane();
         // Create sidebar for modules
         VBox sidebar = new VBox();

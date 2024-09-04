@@ -1,5 +1,6 @@
 package com.automobileapp.sotame.views;
 
+import com.automobileapp.sotame.database.DatabaseManager;
 import com.automobileapp.sotame.models.Employee;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 public class EmployeeListView {
     private final ObservableList<Employee> employeeList;
     private final TableView<Employee> tableViewEmployee;
@@ -20,6 +23,14 @@ public class EmployeeListView {
     public EmployeeListView(){
         // init employee list
         employeeList = FXCollections.observableArrayList();
+
+        // getting all employees from database
+        try {
+            employeeList.addAll(DatabaseManager.getAllEmployees());
+        } catch (SQLException e) {
+            System.err.println("Error al obtener empleados: "+ e.getMessage());
+        }
+
         tableViewEmployee = new TableView<>(employeeList);
 
         // definition of table Columnns, reflecting employee class attributes
@@ -67,12 +78,24 @@ public class EmployeeListView {
             Employee selectedEmployee = tableViewEmployee.getSelectionModel().getSelectedItem();
             if(selectedEmployee != null){
                 showEmployeeForm(selectedEmployee); // pass selected employee
+                try {
+                    DatabaseManager.updateEmployee(selectedEmployee); // update selected employee
+                    tableViewEmployee.refresh(); // refresh table view if we update values of employee
+                } catch (SQLException ex) {
+                    System.err.println("Error al actualizar el empleado" + ex.getMessage());
+                }
+
             }
         });
         // deleteBUtton will delete selected employee
         deleteButton.setOnAction(e -> {
             Employee selectedEmployee = tableViewEmployee.getSelectionModel().getSelectedItem();
             if(selectedEmployee != null){
+                try {
+                    DatabaseManager.deleteEmployee(selectedEmployee.getIdEmployee());
+                } catch (SQLException ex) {
+                    System.err.println("Error al borrar empleado: "+ ex.getMessage());
+                }
                 employeeList.remove(selectedEmployee);
             }
         });
