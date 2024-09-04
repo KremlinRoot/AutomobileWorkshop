@@ -20,7 +20,7 @@ import java.io.IOException;
 
 public class MainApp extends Application {
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) {
         /*
         start() is main entry point of application, class stage is to can build a window (top level container)
         scene class is container of all elements (content).
