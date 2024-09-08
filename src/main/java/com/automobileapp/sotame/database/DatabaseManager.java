@@ -55,6 +55,27 @@ public class DatabaseManager {
                     )
                     """;
             stmt.execute(createTableSupplier);
+
+            String createTableAutomobile = """
+                    CREATE TABLE IF NOT EXISTS AUTOMOBILE (
+                        idAutomobile INT AUTO_INCREMENT PRIMARY KEY,
+                        manufacturer VARCHAR(255),
+                        model VARCHAR(255),
+                        yearManufactured VARCHAR(255),
+                        color VARCHAR(255),
+                        numberPlate VARCHAR(255),
+                        numberVin VARCHAR(255),
+                        kilometers INT,
+                        fuelType VARCHAR(255),
+                        currentState VARCHAR(255),
+                        lastMaintenance DATE,
+                        nextMaintenance DATE
+                    )
+                    """;
+            stmt.execute(createTableAutomobile);
+
+            
+
         } catch (SQLException e) {
             System.err.println("Error al inicalizar base de datos: "+ e.getMessage());
         }
