@@ -67,7 +67,8 @@ public class EmployeeFormView {
                if(employee == null){
                    // create new employee
                    Employee newEmployee = new Employee(0, firstNameField.getText(), lastNameField.getText(), emailField.getText(), phoneField.getText(), jobTitleField.getText(), workedHours);
-                   DatabaseManager.insertEmployee(newEmployee);
+                   int generatedID = DatabaseManager.insertEmployee(newEmployee);
+                   newEmployee.setIdEmployee(generatedID);
                    employeeList.add(newEmployee);
                } else {
                    // update employee

@@ -2,6 +2,7 @@ package com.automobileapp.sotame;
 
 import com.automobileapp.sotame.database.DatabaseManager;
 import com.automobileapp.sotame.views.EmployeeListView;
+import com.automobileapp.sotame.views.SupplierListView;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,6 +16,9 @@ import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import org.h2.tools.Server;
+
+import java.sql.SQLException;
 
 
 public class MainApp extends Application {
@@ -25,7 +29,8 @@ public class MainApp extends Application {
         scene class is container of all elements (content).
         root element of main scene is mainStackPane.
          */
-        DatabaseManager.initializeDatabase();
+        DatabaseManager.initializeDatabase(); // Init H" database
+        startH2WebConsole();
         BorderPane mainLayout = new BorderPane();
         // Create sidebar for modules
         VBox sidebar = new VBox();
@@ -80,9 +85,26 @@ public class MainApp extends Application {
             EmployeeListView employeeListView = new EmployeeListView();
             employeeListView.show(primaryStage);
         });
+        btnSuppliersModule.setOnAction(e -> {
+            SupplierListView supplierListView = new SupplierListView();
+            supplierListView.show(primaryStage);
+        });
     }
 
     public static void main(String[] args) {
         launch();
+    }
+
+    /**
+     *
+     */
+    public void startH2WebConsole(){
+        try{
+            Server webServer = Server.createWebServer("-web","-webAllowOthers", "-webPort","8082").start();
+            System.out.println("H2 console started at ..."+webServer.getURL());
+        } catch(SQLException e) {
+
+            System.out.println("H2 console error: "+e.getMessage());
+        }
     }
 }
