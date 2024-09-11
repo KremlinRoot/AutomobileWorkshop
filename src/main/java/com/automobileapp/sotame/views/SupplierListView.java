@@ -36,7 +36,7 @@ public class SupplierListView {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idSupplier"));
         TableColumn<Supplier, String> nameColumn = new TableColumn<>("Nombre");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("firstNameSupplier"));
-        TableColumn<Supplier, String> lastNameColumn = new TableColumn<>("Apellido");
+        TableColumn<Supplier, String> lastNameColumn = new TableColumn<>("Apellidos");
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastNameSupplier"));
         TableColumn<Supplier, String> emailColumn = new TableColumn<>("Email");
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("emailSupplier"));

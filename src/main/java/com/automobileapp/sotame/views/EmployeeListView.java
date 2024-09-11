@@ -38,7 +38,7 @@ public class EmployeeListView {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idEmployee"));
         TableColumn<Employee, String> firstNameColumn = new TableColumn<>("Nombre");
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        TableColumn<Employee, String> lastNameColumn = new TableColumn<>("Apellido");
+        TableColumn<Employee, String> lastNameColumn = new TableColumn<>("Apellidos");
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         TableColumn<Employee, String> emailColumn = new TableColumn<>("Email");
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));

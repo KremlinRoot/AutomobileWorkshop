@@ -11,7 +11,7 @@ public class Employee {
     private double workedHours;
 
     // Constructors
-
+    public Employee(){}
     /**
      * Full constructor for class employee
      * @param idEmployee
@@ -35,7 +35,7 @@ public class Employee {
     /**
      * default constructor for employee clas, no needs parameters
      */
-    public Employee(){}
+
     // Getters and Setter
     public void setIdEmployee(int idEmployee){ this.idEmployee = idEmployee; }
     public int getIdEmployee(){return idEmployee;}

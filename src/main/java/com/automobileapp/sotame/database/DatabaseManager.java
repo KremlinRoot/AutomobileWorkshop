@@ -1,16 +1,17 @@
 package com.automobileapp.sotame.database;
 
-import com.automobileapp.sotame.models.Employee;
-import com.automobileapp.sotame.models.Supplier;
+import com.automobileapp.sotame.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {
-    private static final String DB_URL = "jdbc:h2:~/sotameDB";
-    private static final String DB_USER = "user_sotame";
-    private static final String DB_PASSWORD = "userpassword";
+    private static final String DB_URL = "jdbc:h2:./sotameDB;AUTO_SERVER=TRUE";
+    private static final String DB_USER = "mecanikred";
+    private static final String DB_PASSWORD = "admin";
 
     // methods to get connection
 
@@ -20,6 +21,7 @@ public class DatabaseManager {
      * @throws SQLException
      */
     public static Connection getConnection() throws SQLException {
+        DriverManager.registerDriver(new org.h2.Driver());
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
@@ -32,7 +34,7 @@ public class DatabaseManager {
                         firstName VARCHAR(255),
                         lastName VARCHAR(255),
                         email VARCHAR(255),
-                        phone VARCHAR(255),
+                        phone VARCHAR(20),
                         jobTitle VARCHAR(255),
                         workedHours DOUBLE
                     );
@@ -45,16 +47,70 @@ public class DatabaseManager {
                         firstNameSupplier VARCHAR(255),
                         lastNameSupplier VARCHAR(255),
                         emailSupplier VARCHAR(255),
-                        phoneSupplier VARCHAR(50),
+                        phoneSupplier VARCHAR(20),
                         addressSupplier VARCHAR(255),
-                        citySupplier VARCHAR(100),
-                        provinceSupplier VARCHAR(100),
-                        zipSupplier VARCHAR(20),
-                        countrySupplier VARCHAR(100),
+                        citySupplier VARCHAR(255),
+                        provinceSupplier VARCHAR(255),
+                        zipSupplier VARCHAR(10),
+                        countrySupplier VARCHAR(255),
                         companyNameSupplier VARCHAR(255)
-                    )
+                    );
                     """;
             stmt.execute(createTableSupplier);
+
+            String createTableAutomobile = """
+                    CREATE TABLE IF NOT EXISTS AUTOMOBILE (
+                        idAutomobile INT AUTO_INCREMENT PRIMARY KEY,
+                        manufacturer VARCHAR(255),
+                        model VARCHAR(255),
+                        yearManufactured VARCHAR(10),
+                        color VARCHAR(50),
+                        numberPlate VARCHAR(50),
+                        numberVin VARCHAR(50),
+                        kilometers INT,
+                        fuelType VARCHAR(50),
+                        currentState VARCHAR(255),
+                        lastMaintenance DATE,
+                        nextMaintenance DATE
+                    );
+                    """;
+            stmt.execute(createTableAutomobile);
+
+            String createTableCustomer = """
+                    CREATE TABLE IF NOT EXISTS CUSTOMER (
+                        idCustomer INT AUTO_INCREMENT PRIMARY KEY,
+                        firstNameCustomer VARCHAR(255),
+                        lastNameCustomer VARCHAR(255),
+                        emailCustomer VARCHAR(255),
+                        phoneCustomer VARCHAR(20),
+                        addressCustomer VARCHAR(255),
+                        cityCustomer VARCHAR(255),
+                        provinceCustomer VARCHAR(255),
+                        zipCustomer VARCHAR(10),
+                        countryCustomer VARCHAR(255),
+                        customerType VARCHAR(50),
+                        dateOfBirthCustomer DATE
+                    );
+                    """;
+            stmt.execute(createTableCustomer);
+
+            String createTableOrder = """
+                    CREATE TABLE IF NOT EXISTS ORDER_WORK (
+                        idOrder INT AUTO_INCREMENT PRIMARY KEY,
+                        orderNumber VARCHAR(255),
+                        orderDate DATE,
+                        estimatedCompletionDate DATE,
+                        workDescription VARCHAR(800),
+                        totalCost DOUBLE,
+                        statusOrder VARCHAR(255),
+                        idAutomobile INT,
+                        idCustomer INT,
+                        FOREIGN KEY (idAutomobile) REFERENCES AUTOMOBILE(idAutomobile),
+                        FOREIGN KEY (idCustomer) REFERENCES CUSTOMER(idCustomer)
+                    );
+                    """;
+            stmt.execute(createTableOrder);
+
         } catch (SQLException e) {
             System.err.println("Error al inicalizar base de datos: "+ e.getMessage());
         }
@@ -148,6 +204,30 @@ public class DatabaseManager {
             pstmt.executeUpdate();
         }
     }
+
+    public static Employee getEmployeeById(int idEmployee, Connection conn) throws SQLException {
+        String getEmployeeByIdSQL = "SELECT * FROM employee WHERE idEmployee = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(getEmployeeByIdSQL)){
+            pstmt.setInt(1, idEmployee);
+            try(ResultSet rs = pstmt.executeQuery()){
+                if(rs.next()){
+                    Employee employeeFromTable = new Employee();
+                    employeeFromTable.setIdEmployee(rs.getInt("idEmployee"));
+                    employeeFromTable.setFirstName("firstName");
+                    employeeFromTable.setLastName("lastName");
+                    employeeFromTable.setEmail("email");
+                    employeeFromTable.setPhone("phone");
+                    employeeFromTable.setJobTitle("jobTitle");
+                    employeeFromTable.setWorkedHours(rs.getDouble("workedHours"));
+                    return employeeFromTable;
+
+                }
+            }
+        } catch (SQLException e) {
+            System.err.print("Error while getting employee by id: " +" methos: getEmployeeById(int idEmployee, Connection conn)"+ e.getMessage());
+        }
+        return null;
+    }
     // CRUD Supplier
     /**
      * Inserts a new supplier into the database
@@ -179,7 +259,7 @@ public class DatabaseManager {
                 if(generatedKeys.next()){
                     return generatedKeys.getInt(1);
                 } else {
-                    throw new SQLException("No ID obtained from insert");
+                    throw new SQLException("No ID obtained from insertSupplier");
                 }
             }
         }
@@ -243,4 +323,245 @@ public class DatabaseManager {
             pstmt.executeUpdate();
         }
     }
+
+    // Orders CRUD
+
+    public static int insertOrder(Order order) throws SQLException {
+        String insertOrderSQL = """
+            INSERT INTO order_work (orderNumber, orderDate, estimatedCompletionDate, workDescription, totalCost, statusOrder, idAutomobile, idCustomer)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+            """;
+
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(insertOrderSQL, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, order.getOrderNumber());
+            pstmt.setDate(2, Date.valueOf(order.getOrderDate()));
+            pstmt.setDate(3, Date.valueOf(order.getEstimatedCompletionDate()));
+            pstmt.setString(4, order.getWorkDescription());
+            pstmt.setDouble(5, order.getTotalCost());
+            pstmt.setString(6, order.getStatusOrder().toString());
+
+            // Obtiene los IDs de Automobile y Customer para asignar la relación
+            pstmt.setInt(7, order.getAutomobileOfOrder().getIdAutomobile());
+            pstmt.setInt(8, order.getCustomerOfOrder().getIdCustomer());
+            pstmt.executeUpdate();
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("No ID obtained from insertOrder");
+                }
+            }
+        }
+    }
+
+    public static boolean updateOrder(Order order) throws SQLException {
+        String updateOrderSQL = """
+            UPDATE order_work 
+            SET orderNumber = ?, orderDate = ?, estimatedCompletionDate = ?, workDescription = ?, totalCost = ?, statusOrder = ?, idAutomobile = ?, idCustomer = ?
+            WHERE idOrder = ?;
+            """;
+
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(updateOrderSQL)) {
+            pstmt.setString(1, order.getOrderNumber());
+            pstmt.setDate(2, Date.valueOf(order.getOrderDate()));
+            pstmt.setDate(3, Date.valueOf(order.getEstimatedCompletionDate()));
+            pstmt.setString(4, order.getWorkDescription());
+            pstmt.setDouble(5, order.getTotalCost());
+            pstmt.setString(6, order.getStatusOrder().toString());
+            pstmt.setInt(7, order.getAutomobileOfOrder().getIdAutomobile());
+            pstmt.setInt(8, order.getCustomerOfOrder().getIdCustomer());
+
+            pstmt.setInt(9, order.getIdOrder());
+
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar la orden: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static void deleteOrder(int idOrder) throws SQLException {
+        String deleteOrderSQL = "DELETE FROM order_work WHERE idOrder = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(deleteOrderSQL)) {
+            pstmt.setInt(1, idOrder);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar la orden: " + e.getMessage());
+        }
+    }
+
+    public static Automobile getAutomobile(String manufacturer, String model, String plates) throws SQLException {
+        String getAutomobileSQL = """
+            SELECT * FROM AUTOMOBILE WHERE manufacturer = ? AND model = ? AND numberPlate = ?;
+            """;
+
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(getAutomobileSQL)) {
+            pstmt.setString(1, manufacturer);
+            pstmt.setString(2, model);
+            pstmt.setString(3, plates);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Automobile automobile = new Automobile();
+                    automobile.setIdAutomobile(rs.getInt("idAutomobile"));
+                    automobile.setManufacturer(rs.getString("manufacturer"));
+                    automobile.setModel(rs.getString("model"));
+                    automobile.setYearManufactured(rs.getString("yearManufactured"));
+                    automobile.setColor(rs.getString("color"));
+                    automobile.setNumberPlate(rs.getString("numberPlate"));
+                    automobile.setNumberVin(rs.getString("numberVin"));
+                    automobile.setKilometers(rs.getInt("kilometers"));
+                    automobile.setFuelType(Fuel.valueOf(rs.getString("fuelType")));
+                    automobile.setCurrentState(rs.getString("currentState"));
+                    automobile.setLastMaintenance(rs.getDate("lastMaintenance").toLocalDate());
+                    automobile.setNextMaintenance(rs.getDate("nextMaintenance").toLocalDate());
+
+                    return automobile;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener el automóvil: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public static Customer getCustomer(String firstName, String lastName) throws SQLException {
+        String getCustomerSQL = """
+            SELECT * FROM CUSTOMER WHERE firstNameCustomer = ? AND lastNameCustomer = ?;
+            """;
+
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(getCustomerSQL)) {
+            pstmt.setString(1, firstName);
+            pstmt.setString(2, lastName);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Customer customer = new Customer();
+                    customer.setIdCustomer(rs.getInt("idCustomer"));
+                    customer.setFirstNameCustomer(rs.getString("firstNameCustomer"));
+                    customer.setLastNameCustomer(rs.getString("lastNameCustomer"));
+                    customer.setDateOfBirthCustomer(rs.getDate("dateOfBirthCustomer").toLocalDate());
+                    customer.setEmailCustomer(rs.getString("emailCustomer"));
+                    customer.setPhoneCustomer(rs.getString("phoneCustomer"));
+                    customer.setAddressCustomer(rs.getString("addressCustomer"));
+                    customer.setCityCustomer(rs.getString("cityCustomer"));
+                    customer.setProvinceCustomer(rs.getString("provinceCustomer"));
+                    customer.setZipCustomer(rs.getString("zipCustomer"));
+                    customer.setCountryCustomer(rs.getString("countryCustomer"));
+
+                    return customer;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener el cliente: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public static List<Order> getAllOrders() throws SQLException {
+        // Consulta SQL para recuperar todas las órdenes junto con los datos de automóvil y cliente
+        String getAllOrdersSQL = """
+                SELECT o.idOrder, o.orderNumber, o.orderDate, o.estimatedCompletionDate, o.workDescription, 
+                       o.totalCost, o.statusOrder, 
+                       o.idAutomobile, a.manufacturer, a.model, a.yearManufactured, a.color, a.numberPlate, 
+                       o.idCustomer, c.firstNameCustomer, c.lastNameCustomer, c.emailCustomer
+                FROM order_work o
+                JOIN AUTOMOBILE a ON o.idAutomobile = a.idAutomobile
+                JOIN CUSTOMER c ON o.idCustomer = c.idCustomer;
+                """;
+
+        // Lista para almacenar las órdenes recuperadas
+        List<Order> orderList = new ArrayList<>();
+
+        // Intento de conexión y ejecución de la consulta
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(getAllOrdersSQL);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            // Recorrido por los resultados para crear objetos Order y agregar a la lista
+            while (rs.next()) {
+                // Creación de objetos relacionados: Automobile y Customer
+                Automobile automobile = new Automobile();
+                automobile.setIdAutomobile(rs.getInt("idAutomobile"));
+                automobile.setManufacturer(rs.getString("manufacturer"));
+                automobile.setModel(rs.getString("model"));
+                automobile.setYearManufactured(rs.getString("yearManufactured"));
+                automobile.setColor(rs.getString("color"));
+                automobile.setNumberPlate(rs.getString("numberPlate"));
+
+                Customer customer = new Customer();
+                customer.setIdCustomer(rs.getInt("idCustomer"));
+                customer.setFirstNameCustomer(rs.getString("firstNameCustomer"));
+                customer.setLastNameCustomer(rs.getString("lastNameCustomer"));
+                customer.setEmailCustomer(rs.getString("emailCustomer"));
+
+                // Creación del objeto Order con la información obtenida
+                Order order = new Order();
+                order.setIdOrder(rs.getInt("idOrder"));
+                order.setOrderNumber(rs.getString("orderNumber"));
+                order.setOrderDate(rs.getDate("orderDate").toLocalDate());
+                order.setEstimatedCompletionDate(rs.getDate("estimatedCompletionDate").toLocalDate());
+                order.setWorkDescription(rs.getString("workDescription"));
+                order.setTotalCost(rs.getDouble("totalCost"));
+                order.setStatusOrder(StatusOrder.valueOf(rs.getString("statusOrder")));
+                order.setAutomobileOfOrder(automobile);
+                order.setCustomerOfOrder(customer);
+
+                // Añadir la orden a la lista
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            // Manejo de excepciones
+            System.err.println("Error al obtener las órdenes: " + e.getMessage());
+        }
+
+        // Retorno de la lista de órdenes
+        return orderList;
+    }
+
+    public static int insertAutomobileIntoNewOrderForm(Automobile automobile) throws SQLException {
+        String insertAutomobileSQL = """
+                INSERT INTO AUTOMOBILE (manufacturer, model, numberPlate, yearManufactured) VALUES (?, ?, ?,?);
+                """;
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(insertAutomobileSQL, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, automobile.getManufacturer());
+            pstmt.setString(2, automobile.getModel());
+            pstmt.setString(3, automobile.getNumberPlate());
+            pstmt.setString(4, automobile.getYearManufactured());
+            pstmt.executeUpdate();
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                } else {
+                    throw new SQLException("No ID obtained from insertAutomobileIntoNewOrderForm");
+                }
+            }
+        }
+
+
+    }
+
+    public static int insertCustomerIntoNewOrderForm(Customer customer) throws SQLException {
+        String insertCustomerSQL= """
+                INSERT INTO CUSTOMER (firstNameCustomer, lastNameCustomer, emailCustomer) VALUES (?, ?, ?);
+                """;
+        try(Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(insertCustomerSQL, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, customer.getFirstNameCustomer());
+            pstmt.setString(2, customer.getLastNameCustomer());
+            pstmt.setString(3, customer.getEmailCustomer());
+            pstmt.executeUpdate();
+
+            try(ResultSet rs = pstmt.getGeneratedKeys()) {
+                if(rs.next()){
+                    return rs.getInt(1);
+                } else {
+                    throw new SQLException("No ID obtained from insertCustomerIntoNewOrderForm");
+                }
+            }
+        }
+    }
+// end class
 }
