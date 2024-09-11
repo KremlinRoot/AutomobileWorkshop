@@ -65,6 +65,13 @@ public class Customer {
         this.dateOfBirthCustomer = dateOfBirthCustomer;
     }
 
+    public Customer(int idCustomer,String firstNameCustomer, String lastNameCustomer)
+    {
+        this.idCustomer = idCustomer;
+        this.firstNameCustomer = firstNameCustomer;
+        this.lastNameCustomer = lastNameCustomer;
+    }
+
     // Getters and setters
 
 

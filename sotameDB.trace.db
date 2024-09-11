@@ -1,0 +1,22 @@
+2024-09-11 12:08:28 database: wrong user or password; user: "MECANIKRED"
+org.h2.message.DbException: Wrong user name or password [28000-220]
+	at com.h2database@2.2.220/org.h2.message.DbException.get(DbException.java:223)
+	at com.h2database@2.2.220/org.h2.message.DbException.get(DbException.java:199)
+	at com.h2database@2.2.220/org.h2.message.DbException.get(DbException.java:188)
+	at com.h2database@2.2.220/org.h2.engine.Engine.openSession(Engine.java:154)
+	at com.h2database@2.2.220/org.h2.engine.Engine.openSession(Engine.java:222)
+	at com.h2database@2.2.220/org.h2.engine.Engine.createSession(Engine.java:201)
+	at com.h2database@2.2.220/org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:338)
+	at com.h2database@2.2.220/org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:122)
+	at com.h2database@2.2.220/org.h2.util.JdbcUtils.getConnection(JdbcUtils.java:288)
+	at com.h2database@2.2.220/org.h2.server.web.WebServer.getConnection(WebServer.java:808)
+	at com.h2database@2.2.220/org.h2.server.web.WebApp.login(WebApp.java:1039)
+	at com.h2database@2.2.220/org.h2.server.web.WebApp.process(WebApp.java:227)
+	at com.h2database@2.2.220/org.h2.server.web.WebApp.processRequest(WebApp.java:177)
+	at com.h2database@2.2.220/org.h2.server.web.WebThread.process(WebThread.java:152)
+	at com.h2database@2.2.220/org.h2.server.web.WebThread.run(WebThread.java:101)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name or password [28000-220]
+	at com.h2database@2.2.220/org.h2.message.DbException.getJdbcSQLException(DbException.java:522)
+	at com.h2database@2.2.220/org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 16 more

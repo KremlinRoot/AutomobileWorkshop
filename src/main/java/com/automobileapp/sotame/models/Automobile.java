@@ -63,6 +63,14 @@ public class Automobile {
         this.lastMaintenance = lastMaintenance;
         this.nextMaintenance = nextMaintenance;
     }
+    public Automobile(int idAutomobile, String manufacturer, String model, String numberPlate, String yearManufactured)
+    {
+        this.idAutomobile = idAutomobile;
+        this.manufacturer = manufacturer;
+        this.model = model;
+        this.numberPlate = numberPlate;
+        this.yearManufactured = yearManufactured;
+    }
 
     // Getters and setters
 
