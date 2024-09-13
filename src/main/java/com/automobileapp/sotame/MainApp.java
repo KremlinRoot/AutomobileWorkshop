@@ -2,6 +2,7 @@ package com.automobileapp.sotame;
 
 import com.automobileapp.sotame.database.DatabaseManager;
 import com.automobileapp.sotame.views.EmployeeListView;
+import com.automobileapp.sotame.views.ItemStockListView;
 import com.automobileapp.sotame.views.OrderListView;
 import com.automobileapp.sotame.views.SupplierListView;
 import javafx.application.Application;
@@ -93,6 +94,10 @@ public class MainApp extends Application {
         btnOrdersModule.setOnAction(event -> {
             OrderListView orderListView = new OrderListView();
             orderListView.show(primaryStage);
+        });
+        btnManageStockModule.setOnAction(e -> {
+            ItemStockListView itemStockListView = new ItemStockListView();
+            itemStockListView.show(primaryStage);
         });
     }
 
