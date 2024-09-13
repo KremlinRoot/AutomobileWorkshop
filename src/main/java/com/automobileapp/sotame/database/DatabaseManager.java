@@ -111,6 +111,22 @@ public class DatabaseManager {
                     """;
             stmt.execute(createTableOrder);
 
+            String createTableStockItem = """
+                    CREATE TABLE IF NOT EXISTS STOCK_ITEM (
+                        idStockItem INT AUTO_INCREMENT PRIMARY KEY,
+                        productName VARCHAR(255),
+                        productCode VARCHAR(255),
+                        category VARCHAR(255),
+                        quantityInStock INT,
+                        minimumQuantityInStock INT,
+                        unitPrice DOUBLE,
+                        supplier VARCHAR(255),
+                        totalCost DOUBLE,
+                        notes VARCHAR(255)
+                    );
+                    """;
+            stmt.execute(createTableStockItem);
+
         } catch (SQLException e) {
             System.err.println("Error al inicalizar base de datos: "+ e.getMessage());
         }
@@ -561,6 +577,87 @@ public class DatabaseManager {
                     throw new SQLException("No ID obtained from insertCustomerIntoNewOrderForm");
                 }
             }
+        }
+    }
+
+    public static ObservableList<StockItem> getAllItemStock() throws SQLException {
+        ObservableList<StockItem> itemStockListInTable = FXCollections.observableArrayList();
+        String getAllItemStockSQL = """
+                SELECT * FROM STOCK_ITEM;
+                """;
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(getAllItemStockSQL)) {
+            while (rs.next()) {
+                StockItem stockItemsFromTable = new StockItem(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        Category.valueOf(rs.getString(4)),
+                        rs.getInt(5),
+                        rs.getInt(6),
+                        rs.getDouble(7),
+                        rs.getString(8),
+                        rs.getString(10));
+                itemStockListInTable.add(stockItemsFromTable);
+            }
+        }
+        return itemStockListInTable;
+    }
+
+    public static int insertItemStock(StockItem newStockItem) throws SQLException {
+        String insertItemStockSQL = """
+                INSERT INTO STOCK_ITEM (productName, productCode, category, quantityInStock, minimumQuantityInStock, unitPrice, supplier, totalCost, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """;
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(insertItemStockSQL, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, newStockItem.getProductName());
+            pstmt.setString(2, newStockItem.getProductCode());
+            pstmt.setString(3, newStockItem.getCategory().toString());
+            pstmt.setInt(4, newStockItem.getQuantityInStock());
+            pstmt.setInt(5, newStockItem.getMinumunQunantityInStock());
+            pstmt.setDouble(6, newStockItem.getUnitPrice());
+            pstmt.setString(7, newStockItem.getSupplier());
+            pstmt.setDouble(8, newStockItem.getTotalCost());
+            pstmt.setString(9, newStockItem.getNotes());
+            pstmt.executeUpdate();
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                } else {
+                    throw new SQLException("No ID obtained from insertItemStock");
+                }
+            }
+        }
+    }
+
+    public static void updateItemStock(StockItem stockItem) throws SQLException {
+        String updateItemStockSQL = """
+                UPDATE STOCK_ITEM
+                SET productName = ?, productCode = ?, category = ?, quantityInStock = ?, minimumQuantityInStock = ?, unitPrice = ?, supplier = ?,  totalCost = ?,notes = ?
+                WHERE idStockItem = ?;
+                """;
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(updateItemStockSQL)) {
+            pstmt.setString(1, stockItem.getProductName());
+            pstmt.setString(2, stockItem.getProductCode());
+            pstmt.setString(3, stockItem.getCategory().toString());
+            pstmt.setInt(4, stockItem.getQuantityInStock());
+            pstmt.setInt(5, stockItem.getMinumunQunantityInStock());
+            pstmt.setDouble(6, stockItem.getUnitPrice());
+            pstmt.setString(7, stockItem.getSupplier());
+            pstmt.setDouble(8, stockItem.getTotalCost());
+            pstmt.setString(9, stockItem.getNotes());
+            pstmt.setInt(10, stockItem.getIdStockItem());
+            pstmt.executeUpdate();
+        }
+    }
+
+    public static void deleteItemStock(StockItem deletedItem) throws SQLException {
+        String deleteItemStockSQL = """
+                DELETE FROM STOCK_ITEM
+                WHERE idStockItem = ?;
+                """;
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(deleteItemStockSQL)) {
+            pstmt.setInt(1, deletedItem.getIdStockItem());
+            pstmt.executeUpdate();
         }
     }
 // end class
