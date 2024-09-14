@@ -83,16 +83,6 @@ public class StockItemFormView {
                             Supplier.getText(),
                             notes.getText()
                     );
-//                    newStockItem.setProductName(productName.getText());
-//                    newStockItem.setProductCode(productCode.getText());
-//                    newStockItem.setCategory(categoryComboBox.getValue());
-//                    newStockItem.setQuantityInStock(Integer.parseInt(quantityInStock.getText()));
-//                    newStockItem.setMinumunQunantityInStock(Integer.parseInt(minumunQunantityInStock.getText()));
-//                    newStockItem.setUnitPrice(Double.parseDouble(unitPrice.getText()));
-//                    newStockItem.setSupplier(Supplier.getText());
-//                    newStockItem.setTotalCost(newStockItem.getTotalCost() * );
-//                    newStockItem.setNotes(notes.getText());
-//                    stockItemList.add(newStockItem);
 
                     // Insert item stock in database and get ID
                     int idNewItemStock = DatabaseManager.insertItemStock(newStockItem);

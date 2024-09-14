@@ -660,5 +660,25 @@ public class DatabaseManager {
             pstmt.executeUpdate();
         }
     }
+
+    public static List<Order> getDeliveryDatesOfOrders() throws SQLException {
+        List<Order> ordersWithDeliveryDates = new ArrayList<>();
+        String getDeliveryDatesOfOrdersSQL = """
+                SELECT idOrder, orderNumber, estimatedCompletionDate, workDescription, totalCost
+                FROM ORDER_WORK WHERE estimatedCompletionDate IS NOT NULL;
+                """;
+        try(Connection conn = getConnection();PreparedStatement pstmt = conn.prepareStatement(getDeliveryDatesOfOrdersSQL)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Order orderWithDeliveryDate = new Order(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getDate(3).toLocalDate(),
+                        rs.getString(4),
+                        rs.getDouble(5));
+                ordersWithDeliveryDates.add(orderWithDeliveryDate);
+            }
+            return ordersWithDeliveryDates;
+        }
+    }
 // end class
 }

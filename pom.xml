@@ -102,6 +102,15 @@
 <!--      <version>3.42.0.0</version>-->
 <!--    </dependency>-->
 
+
+    <!-- https://mvnrepository.com/artifact/org.jfxtras/jfxtras-agenda -->
+    <dependency>
+      <groupId>org.jfxtras</groupId>
+      <artifactId>jfxtras-agenda</artifactId>
+      <version>11-r2</version>
+    </dependency>
+
+
   </dependencies>
 
   <build>

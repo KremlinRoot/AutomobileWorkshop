@@ -22,6 +22,21 @@ public class Order {
     public Order(){}
 
     /**
+     * Constructor to create order into Delivery Calendar module
+     * @param idOrder
+     * @param orderNumber
+     * @param estimatedCompletionDate
+     * @param workDescription
+     * @param totalCost
+     */
+    public Order(int idOrder,String orderNumber, LocalDate estimatedCompletionDate, String workDescription, double totalCost){
+        this.idOrder = idOrder;
+        this.orderNumber = orderNumber;
+        this.estimatedCompletionDate = estimatedCompletionDate;
+        this.workDescription = workDescription;
+        this.totalCost = totalCost;
+    }
+    /**
      * Creates a new order with all the parameters
      * @param idOrder
      * @param orderNumber
