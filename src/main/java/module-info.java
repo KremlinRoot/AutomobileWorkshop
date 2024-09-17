@@ -1,5 +1,4 @@
 module com.automobileapp.sotame {
-    requires javafx.controls;
 
 
     requires org.controlsfx.controls;
@@ -9,6 +8,7 @@ module com.automobileapp.sotame {
     requires jdk.compiler;
     requires com.h2database;
     requires java.sql;
+    requires jfxtras.agenda;
 
     opens com.automobileapp.sotame.models to javafx.base;
     exports com.automobileapp.sotame;

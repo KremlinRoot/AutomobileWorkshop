@@ -1,10 +1,7 @@
 package com.automobileapp.sotame;
 
 import com.automobileapp.sotame.database.DatabaseManager;
-import com.automobileapp.sotame.views.EmployeeListView;
-import com.automobileapp.sotame.views.ItemStockListView;
-import com.automobileapp.sotame.views.OrderListView;
-import com.automobileapp.sotame.views.SupplierListView;
+import com.automobileapp.sotame.views.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -98,6 +95,14 @@ public class MainApp extends Application {
         btnManageStockModule.setOnAction(e -> {
             ItemStockListView itemStockListView = new ItemStockListView();
             itemStockListView.show(primaryStage);
+        });
+        btnDeliveryDateModule.setOnAction(e -> {
+            DeliveryCalendar deliveryCalendar = new DeliveryCalendar();
+            try {
+                deliveryCalendar.showDeliveryCalendar();
+            } catch (SQLException ex) {
+                System.err.println("Error to open 'Fechas de Entrega' module " + ex.getMessage());
+            }
         });
     }
 
