@@ -34,12 +34,14 @@ public class OrderListView {
         // Defining columns by Order class variables
         TableColumn<Order,Integer> idOrder = new TableColumn<>("ID");
         idOrder.setCellValueFactory(new PropertyValueFactory<>("idOrder"));
+        TableColumn<Order, String> orderNumber = new TableColumn<>("Número de Órden");
+        orderNumber.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
         TableColumn<Order,String> dateOrder = new TableColumn<>("Fecha");
         dateOrder.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         TableColumn<Order, String> estimatedCompletionDate = new TableColumn<>("Fecha Estimada de Entrega");
         estimatedCompletionDate.setCellValueFactory(new PropertyValueFactory<>("estimatedCompletionDate"));
         TableColumn<Order,String> workDescription = new TableColumn<>("Descripción del Trabajo");
-        workDescription.setPrefWidth(450);
+        workDescription.setPrefWidth(300);
         workDescription.setCellValueFactory(new PropertyValueFactory<>("workDescription"));
         workDescription.setCellFactory(tc -> {
             TableCell<Order, String> cell = new TableCell<>();
@@ -76,7 +78,7 @@ public class OrderListView {
         TableColumn<Order,String> customerLastName = new TableColumn<>("Apellido(s) del Cliente");
         customerLastName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomerOfOrder().getLastNameCustomer()));
         // Adding columns to table
-        tableViewOrder.getColumns().addAll(idOrder,dateOrder,
+        tableViewOrder.getColumns().addAll(idOrder,orderNumber,
                 estimatedCompletionDate,
                 workDescription,
                 totalCost,
@@ -100,7 +102,8 @@ public class OrderListView {
         // set up button events
         addButton.setOnAction(event -> {
             // Abre el formulario de órdenes para agregar una nueva orden
-            showOrderForm(null); // `null` para agregar una nueva orden
+            showOrderForm(null);
+
         });
         editButton.setOnAction(event -> {
             // TODO
@@ -144,7 +147,7 @@ public class OrderListView {
         // set up scene and show it
         Stage stage = new Stage();
         stage.setTitle("Módulo de Órdenes de Trabajo");
-        stage.setScene(new Scene(layout, 800, 600));
+        stage.setScene(new Scene(layout, 1000, 600));
         stage.initOwner(parentStage);
         stage.show();
     }

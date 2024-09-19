@@ -113,7 +113,8 @@ public class OrderFormView {
                             customer
                     );
 
-                    DatabaseManager.insertOrder(newOrder);
+                    int idNewOrder = DatabaseManager.insertOrder(newOrder);
+                    newOrder.setIdOrder(idNewOrder);
                     orderList.add(newOrder);
                 } else { // Update existing order
                     order.setOrderDate(orderDate);

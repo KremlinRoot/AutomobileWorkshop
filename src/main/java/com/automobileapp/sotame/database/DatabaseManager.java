@@ -127,6 +127,17 @@ public class DatabaseManager {
                     """;
             stmt.execute(createTableStockItem);
 
+            String createTableBudgetOrder = """
+                    CREATE TABLE IF NOT EXISTS BUDGET_ORDER (
+                        idBudgetOrder INT AUTO_INCREMENT PRIMARY KEY,
+                        idOrder INT,
+                        laborHours DOUBLE,
+                        partCost DOUBLE,
+                        FOREIGN KEY (idOrder) REFERENCES ORDER_WORK(idOrder)
+                    )
+                    """;
+            stmt.execute(createTableBudgetOrder);
+
         } catch (SQLException e) {
             System.err.println("Error al inicalizar base de datos: "+ e.getMessage());
         }
@@ -664,8 +675,9 @@ public class DatabaseManager {
     public static List<Order> getDeliveryDatesOfOrders() throws SQLException {
         List<Order> ordersWithDeliveryDates = new ArrayList<>();
         String getDeliveryDatesOfOrdersSQL = """
-                SELECT idOrder, orderNumber, estimatedCompletionDate, workDescription, totalCost
-                FROM ORDER_WORK WHERE estimatedCompletionDate IS NOT NULL;
+                SELECT idOrder, orderNumber, estimatedCompletionDate, workDescription, totalCost, statusOrder
+                FROM ORDER_WORK WHERE estimatedCompletionDate IS NOT NULL AND statusOrder != 'COMPLETADO'
+                AND statusOrder != 'ENTREGADO';
                 """;
         try(Connection conn = getConnection();PreparedStatement pstmt = conn.prepareStatement(getDeliveryDatesOfOrdersSQL)) {
             ResultSet rs = pstmt.executeQuery();
@@ -674,11 +686,108 @@ public class DatabaseManager {
                         rs.getString(2),
                         rs.getDate(3).toLocalDate(),
                         rs.getString(4),
-                        rs.getDouble(5));
+                        rs.getDouble(5),
+                        StatusOrder.valueOf(rs.getString(6)));
+
                 ordersWithDeliveryDates.add(orderWithDeliveryDate);
             }
             return ordersWithDeliveryDates;
         }
     }
+
+    public static List<BudgetOrder> getAllBudgetOrders() {
+        List<BudgetOrder> budgetOrders = new ArrayList<>();
+
+        String query = "SELECT o.idOrder, o.orderNumber, o.estimatedCompletionDate, o.workDescription, o.totalCost, " +
+                "b.laborHours, b.partCost " +
+                "FROM ORDER_WORK o " +
+                "JOIN BUDGET_ORDER b ON o.idOrder = b.idOrder";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            // Procesar los resultados
+            while (rs.next()) {
+                // Crear el objeto Order
+                Order order = new Order(
+                        rs.getInt("idOrder"),
+                        rs.getString("orderNumber"),
+                        rs.getDate("estimatedCompletionDate").toLocalDate(),
+                        rs.getString("workDescription"),
+                        rs.getDouble("totalCost")
+                );
+
+                // Crear el objeto BudgetOrder con la información del presupuesto
+                BudgetOrder budgetOrder = new BudgetOrder(0,
+                        order,
+                        rs.getDouble("laborHours"),  // Corregí el nombre a "loborHours" según tu tabla
+                        rs.getDouble("partCost")
+                );
+
+                // Añadir el objeto BudgetOrder a la lista
+                budgetOrders.add(budgetOrder);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener las órdenes presupuestadas: " + e.getMessage());
+        }
+
+        return budgetOrders;
+    }
+
+    // Method to insert a new BudgetOrder
+    public static int insertBudgetOrder(BudgetOrder budgetOrder) throws SQLException {
+        String query = "INSERT INTO BUDGET_ORDER (idOrder, laborHours, partCost) VALUES (?, ?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setInt(1, budgetOrder.getOrder().getIdOrder());
+            preparedStatement.setDouble(2, budgetOrder.getLaborHours());
+            preparedStatement.setDouble(3, budgetOrder.getPartCost());
+
+            preparedStatement.executeUpdate();
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("No ID obtained from insertItemStock");
+                }
+            }
+        }
+    }
+
+    // Method to update an existing BudgetOrder
+    public static void updateBudgetOrder(BudgetOrder budgetOrder) throws SQLException {
+        String query = "UPDATE BUDGET_ORDER SET idOrder = ?, loborHours = ?, partCost = ? WHERE idBudgetOrder = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, budgetOrder.getOrder().getIdOrder());
+            preparedStatement.setDouble(2, budgetOrder.getLaborHours());
+            preparedStatement.setDouble(3, budgetOrder.getPartCost());
+            preparedStatement.setInt(4, budgetOrder.getOrder().getIdOrder()); // Update based on ID
+
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    public static void deleteBudgetOrder(int idOrder) throws SQLException{
+        String deleteBUdgetOrderSQL = """
+                DELETE FROM BUDGET_ORDER
+                WHERE idOrder = ?;
+                """;
+        try(Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(deleteBUdgetOrderSQL)) {
+            pstmt.setInt(1, idOrder);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error while deleting budget order: "
+                +"with ID: "+ idOrder +" method: deleteBudgetOrder"+ e.getMessage());
+        }
+    }
+
+
 // end class
 }
