@@ -144,4 +144,13 @@ public class Order {
     public void setCustomerOfOrder(Customer customerOfOrder) {
         this.customerOfOrder = customerOfOrder;
     }
+
+    @Override
+    public String toString() {
+        // Devuelve una representación legible de la orden
+        return "Orden: " + orderNumber + "\n" + "Fecha de pedido: " + orderDate +"\n" +
+                "Fecha estimada de entrega: " + estimatedCompletionDate + "\n" +
+                "Descripción de trabajo: " + workDescription + "\n" +
+                "Costo total: $" + totalCost;
+    }
 }

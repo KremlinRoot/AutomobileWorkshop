@@ -104,6 +104,10 @@ public class MainApp extends Application {
                 System.err.println("Error to open 'Fechas de Entrega' module " + ex.getMessage());
             }
         });
+        btnBudgetModule.setOnAction(e -> {
+            BudgetListView budgetListView = new BudgetListView();
+            budgetListView.show(primaryStage);
+        });
     }
 
     public static void main(String[] args) {

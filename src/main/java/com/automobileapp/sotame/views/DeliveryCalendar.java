@@ -19,9 +19,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class DeliveryCalendar {
-
+    private Locale locale = new Locale("es","MX");
     private LocalDate currentWeekStart = LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1); // Lunes actual
-
     public void showDeliveryCalendar() throws SQLException {
         // Crear el escenario principal
         Stage calendarStage = new Stage();
@@ -111,8 +110,11 @@ public class DeliveryCalendar {
                 Agenda.Appointment appointment = new Agenda.AppointmentImplLocal()
                         .withStartLocalDateTime(deliveryDate.atTime(9, 0)) // Inicio del día
                         .withEndLocalDateTime(deliveryDate.atTime(17, 0)) // Fin del día
-                        .withSummary("Entrega órden: " + order.getOrderNumber())
-                        .withDescription("Fecha de entrega para la orden #" + order.getOrderNumber());
+                        .withSummary("Entregar órden: " + order.getOrderNumber()+"\n"
+                                + "Trabajo realizado: "+order.getWorkDescription()+"\n"
+                                + "Costo de la órden: $"+order.getTotalCost())
+                        .withDescription("Fecha de entrega para la orden #" + order.getOrderNumber()
+                        + "\n"+"Descripción del trabajo: " + order.getWorkDescription());
                 calendar.appointments().add(appointment);
             }
         }
@@ -124,5 +126,8 @@ public class DeliveryCalendar {
         HBox navigationBox = (HBox) mainLayout.getChildren().get(0);
         Label weekLabel = (Label) navigationBox.getChildren().get(1);
         weekLabel.setText("Semana del " + currentWeekStart);
+
+
+
     }
 }
