@@ -22,6 +22,21 @@ public class Order {
     public Order(){}
 
     /**
+     * Create a new order
+     * @param idOrder
+     * @param orderNumber
+     * @param estimatedCompletionDate
+     * @param workDescription
+     * @param totalCost
+     */
+    public Order(int idOrder,String orderNumber, LocalDate estimatedCompletionDate, String workDescription, double totalCost) {
+        this.idOrder = idOrder;
+        this.orderNumber = orderNumber;
+        this.estimatedCompletionDate = estimatedCompletionDate;
+        this.workDescription = workDescription;
+        this.totalCost = totalCost;
+    }
+    /**
      * Constructor to create order into Delivery Calendar module
      * @param idOrder
      * @param orderNumber
@@ -29,12 +44,14 @@ public class Order {
      * @param workDescription
      * @param totalCost
      */
-    public Order(int idOrder,String orderNumber, LocalDate estimatedCompletionDate, String workDescription, double totalCost){
+    public Order(int idOrder,String orderNumber, LocalDate estimatedCompletionDate, String workDescription, double totalCost, StatusOrder statusOrder) {
         this.idOrder = idOrder;
         this.orderNumber = orderNumber;
         this.estimatedCompletionDate = estimatedCompletionDate;
         this.workDescription = workDescription;
         this.totalCost = totalCost;
+        this.statusOrder = statusOrder;
+
     }
     /**
      * Creates a new order with all the parameters

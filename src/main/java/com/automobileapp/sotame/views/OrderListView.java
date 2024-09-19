@@ -41,7 +41,7 @@ public class OrderListView {
         TableColumn<Order, String> estimatedCompletionDate = new TableColumn<>("Fecha Estimada de Entrega");
         estimatedCompletionDate.setCellValueFactory(new PropertyValueFactory<>("estimatedCompletionDate"));
         TableColumn<Order,String> workDescription = new TableColumn<>("Descripción del Trabajo");
-        workDescription.setPrefWidth(450);
+        workDescription.setPrefWidth(300);
         workDescription.setCellValueFactory(new PropertyValueFactory<>("workDescription"));
         workDescription.setCellFactory(tc -> {
             TableCell<Order, String> cell = new TableCell<>();
@@ -147,7 +147,7 @@ public class OrderListView {
         // set up scene and show it
         Stage stage = new Stage();
         stage.setTitle("Módulo de Órdenes de Trabajo");
-        stage.setScene(new Scene(layout, 800, 600));
+        stage.setScene(new Scene(layout, 1000, 600));
         stage.initOwner(parentStage);
         stage.show();
     }

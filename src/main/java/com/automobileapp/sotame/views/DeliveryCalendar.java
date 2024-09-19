@@ -1,5 +1,6 @@
 package com.automobileapp.sotame.views;
 
+import com.automobileapp.sotame.models.StatusOrder;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -106,7 +107,7 @@ public class DeliveryCalendar {
         LocalDate endOfWeek = currentWeekStart.plusDays(6); // Obtener el final de la semana
         for (Order order : deliveryDatesOrders) {
             LocalDate deliveryDate = order.getEstimatedCompletionDate();
-            if (!deliveryDate.isBefore(currentWeekStart) && !deliveryDate.isAfter(endOfWeek)) {
+            if (!deliveryDate.isBefore(currentWeekStart) && !deliveryDate.isAfter(endOfWeek) ) {
                 Agenda.Appointment appointment = new Agenda.AppointmentImplLocal()
                         .withStartLocalDateTime(deliveryDate.atTime(9, 0)) // Inicio del día
                         .withEndLocalDateTime(deliveryDate.atTime(17, 0)) // Fin del día

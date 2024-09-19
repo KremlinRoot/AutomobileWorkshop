@@ -675,8 +675,9 @@ public class DatabaseManager {
     public static List<Order> getDeliveryDatesOfOrders() throws SQLException {
         List<Order> ordersWithDeliveryDates = new ArrayList<>();
         String getDeliveryDatesOfOrdersSQL = """
-                SELECT idOrder, orderNumber, estimatedCompletionDate, workDescription, totalCost
-                FROM ORDER_WORK WHERE estimatedCompletionDate IS NOT NULL;
+                SELECT idOrder, orderNumber, estimatedCompletionDate, workDescription, totalCost, statusOrder
+                FROM ORDER_WORK WHERE estimatedCompletionDate IS NOT NULL AND statusOrder != 'COMPLETADO'
+                AND statusOrder != 'ENTREGADO';
                 """;
         try(Connection conn = getConnection();PreparedStatement pstmt = conn.prepareStatement(getDeliveryDatesOfOrdersSQL)) {
             ResultSet rs = pstmt.executeQuery();
@@ -685,7 +686,9 @@ public class DatabaseManager {
                         rs.getString(2),
                         rs.getDate(3).toLocalDate(),
                         rs.getString(4),
-                        rs.getDouble(5));
+                        rs.getDouble(5),
+                        StatusOrder.valueOf(rs.getString(6)));
+
                 ordersWithDeliveryDates.add(orderWithDeliveryDate);
             }
             return ordersWithDeliveryDates;
