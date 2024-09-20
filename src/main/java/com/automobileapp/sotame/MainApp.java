@@ -5,8 +5,11 @@ import com.automobileapp.sotame.views.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,15 +28,43 @@ public class MainApp extends Application {
      * Splash screen to start at begin of app
      */
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage){
+        // Create splash screen
+        StackPane splashLayout = new StackPane();
+        ImageView splashImage = new ImageView(new Image(getClass().getResource("/images/splash-screen.png").toExternalForm()));
+        splashLayout.getChildren().add(splashImage);
+        Scene splashScene = new Scene(splashLayout,850,315);
+
+        // Init stage
+        Stage initStage = new Stage();
+        initStage.setScene(splashScene);
+        initStage.show();
+
+        // Loading database and end splash screen run app
+        new Thread(() -> {
+            try{
+                DatabaseManager.initializeDatabase(); // Init H" database
+                startH2WebConsole();
+                Thread.sleep(2500);
+
+            } catch(InterruptedException ex) {
+                System.err.println("Error while initializing application: "+ "method: "+"initApplication()" +"into init Thread" + ex.getMessage());
+            } finally{
+                javafx.application.Platform.runLater(() -> {
+                    initStage.close();
+                    MainApplicationInit(primaryStage);
+                });
+            }
+        }).start();
+    }
+
+    private void MainApplicationInit(Stage primaryStage) {
         /*
         start() is main entry point of application, class stage is to can build a window (top level container)
         scene class is container of all elements (content).
         root element of main scene is mainStackPane.
          */
-        // Splash screen
-        DatabaseManager.initializeDatabase(); // Init H" database
-        startH2WebConsole();
+
         BorderPane mainLayout = new BorderPane();
         // Create sidebar for modules
         VBox sidebar = new VBox();
