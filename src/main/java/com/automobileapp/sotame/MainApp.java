@@ -21,6 +21,9 @@ import java.sql.SQLException;
 
 
 public class MainApp extends Application {
+    /**
+     * Splash screen to start at begin of app
+     */
     @Override
     public void start(Stage primaryStage) {
         /*
@@ -28,6 +31,7 @@ public class MainApp extends Application {
         scene class is container of all elements (content).
         root element of main scene is mainStackPane.
          */
+        // Splash screen
         DatabaseManager.initializeDatabase(); // Init H" database
         startH2WebConsole();
         BorderPane mainLayout = new BorderPane();
@@ -64,7 +68,7 @@ public class MainApp extends Application {
             button.setPrefHeight(55);
         }
         // Configure Scroll pane for sidebar
-        sidebarScrollPane.setFitToHeight(false);
+        sidebarScrollPane.setFitToHeight(true);
 
         // Add sidebar to mainLayout
         mainLayout.setLeft(sidebarScrollPane);
@@ -108,6 +112,18 @@ public class MainApp extends Application {
             BudgetListView budgetListView = new BudgetListView();
             budgetListView.show(primaryStage);
         });
+
+        // Configuration of styling
+        String cssMainStage = getClass().getResource("/MainStyle.css").toExternalForm();
+        mainScene.getStylesheets().add(cssMainStage);
+        btnEmployeeModule.getStyleClass().add("module-button");
+        btnOrdersModule.getStyleClass().add("module-button");
+        btnSuppliersModule.getStyleClass().add("module-button");
+        btnManageStockModule.getStyleClass().add("module-button");
+        btnDeliveryDateModule.getStyleClass().add("module-button");
+        btnBudgetModule.getStyleClass().add("module-button");
+        sidebar.getStyleClass().add("module-sidebar");
+
     }
 
     public static void main(String[] args) {
@@ -126,4 +142,7 @@ public class MainApp extends Application {
             System.out.println("H2 console error: "+e.getMessage());
         }
     }
+
+
+// End of class
 }

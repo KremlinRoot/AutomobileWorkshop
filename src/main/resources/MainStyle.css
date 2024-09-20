@@ -1,0 +1,27 @@
+@font-face {
+    font-family: "OpenSans-Regular";
+    src: url("fonts/OpenSans-Regular.ttf");
+}
+@font-face {
+    font-family: "Roboto";
+    src: url("fonts/Roboto-Regular.ttf");
+}
+.module-button {
+    -fx-background-color: #D32F2F;
+    -fx-background-radius: 5;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.1, 0, 0);
+    -fx-font-family: "Roboto";
+    -fx-max-height: 80px;
+
+
+}
+.module-button:hover {
+    -fx-background-color: #b22222;
+}
+.module-sidebar{
+    -fx-background-color: #cdcdcd;
+}
