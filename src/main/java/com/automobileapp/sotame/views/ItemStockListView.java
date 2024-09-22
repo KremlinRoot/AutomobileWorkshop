@@ -10,12 +10,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ItemStockListView {
@@ -103,6 +105,12 @@ public class ItemStockListView {
         // Setting up scene and show
         Stage stage = new Stage();
         stage.setTitle("Lista de artículos");
+        stage.getIcons().addAll(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
+        );
         stage.setScene(new Scene(layout, 800, 600));
         stage.initOwner(parentStage);
         stage.show();

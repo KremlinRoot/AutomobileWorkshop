@@ -10,11 +10,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class BudgetListView {
     private final ObservableList<BudgetOrder> budgetOrderList;
@@ -31,6 +33,9 @@ public class BudgetListView {
         tableViewBudgetOrder = new TableView<>(budgetOrderList);
 
         // Definir columnas de la tabla reflejando los atributos de BudgetOrder
+        TableColumn<BudgetOrder, Integer> idBudgetOrderColumn = new TableColumn<>("ID");
+        idBudgetOrderColumn.setCellValueFactory(new PropertyValueFactory<>("idBudgetOrder"));
+
         TableColumn<BudgetOrder, String> orderNumberColumn = new TableColumn<>("Número de Orden");
         orderNumberColumn.setCellValueFactory(new PropertyValueFactory<>("orderNumber")); // Aquí necesitas un getter en Order
 
@@ -50,7 +55,7 @@ public class BudgetListView {
         });
 
         // Añadir columnas a la tabla
-        tableViewBudgetOrder.getColumns().addAll(orderNumberColumn, laborHoursColumn, partCostColumn, totalCostColumn);
+        tableViewBudgetOrder.getColumns().addAll(idBudgetOrderColumn,orderNumberColumn, laborHoursColumn, partCostColumn, totalCostColumn);
     }
 
     public void show(Stage parentStage) {
@@ -98,6 +103,12 @@ public class BudgetListView {
         // Configurar escena y mostrarla
         Stage stage = new Stage();
         stage.setTitle("Módulo Presupuestos");
+        stage.getIcons().addAll(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
+        );
         stage.setScene(new Scene(layout, 800, 600));
         stage.initOwner(parentStage);
         stage.show();

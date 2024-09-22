@@ -53,4 +53,12 @@ public class BudgetOrder {
     public String getOrderNumber() {
         return order != null ? this.order.getOrderNumber() : "N/A";
     }
+
+    public int getIdBudgetOrder() {
+        return idBudgetOrder;
+    }
+
+    public void setIdBudgetOrder(int idBudgetOrder) {
+        this.idBudgetOrder = idBudgetOrder;
+    }
 }

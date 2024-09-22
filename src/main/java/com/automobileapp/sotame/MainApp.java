@@ -33,6 +33,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class MainApp extends Application {
@@ -44,6 +45,13 @@ public class MainApp extends Application {
      */
     @Override
     public void start(Stage primaryStage){
+        // Load icons of primary stage
+        primaryStage.getIcons().addAll(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
+        );
         // Create splash screen
         StackPane splashLayout = new StackPane(); 
         ImageView splashImage = new ImageView(new Image(getClass().getResource("/images/splash-screen.png").toExternalForm()));
@@ -74,6 +82,7 @@ public class MainApp extends Application {
     }
 
     private void MainApplicationInit(Stage primaryStage) {
+        // Adding icons to stage
         // Class variables
         /*
         start() is main entry point of application, class stage is to can build a window (top level container)
@@ -121,7 +130,7 @@ public class MainApp extends Application {
         mainLayout.setLeft(sidebarScrollPane);
 
         // Init scene with just the welcome menssage
-        Label welcomeLabel = new Label("Bienvenido a MecanikRed©");
+        Label welcomeLabel = new Label("Bienvenido a MecanikRed");
 
         // Time label
         timeLabel = new Label();
@@ -188,6 +197,7 @@ public class MainApp extends Application {
         btnDeliveryDateModule.getStyleClass().add("module-button");
         btnBudgetModule.getStyleClass().add("module-button");
         sidebar.getStyleClass().add("module-sidebar");
+
         // Orders label
         pendingOrdersLabel.getStyleClass().add("orders-labels");
         inProgressOrdersLabel.getStyleClass().add("orders-labels");

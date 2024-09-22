@@ -10,12 +10,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.h2.engine.Database;
 import com.automobileapp.sotame.database.DatabaseManager;
+
+import java.util.Objects;
 
 public class StockItemFormView {
     private final StockItem stockItem;
@@ -28,6 +31,12 @@ public class StockItemFormView {
 
     public void show(){
         Stage stage = new Stage();
+        stage.getIcons().addAll(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
+        );
         stage.setTitle(stockItem == null ? "Agregar producto" : "Editar Proyecto");
         stage.initModality(Modality.WINDOW_MODAL);
 

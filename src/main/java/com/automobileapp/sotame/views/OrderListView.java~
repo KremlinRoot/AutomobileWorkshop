@@ -10,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -18,7 +17,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
-import java.util.Objects;
 import java.util.Optional;
 
 public class OrderListView {
@@ -149,12 +147,6 @@ public class OrderListView {
         // set up scene and show it
         Stage stage = new Stage();
         stage.setTitle("Módulo de Órdenes de Trabajo");
-        stage.getIcons().addAll(
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
-        );
         stage.setScene(new Scene(layout, 1000, 600));
         stage.initOwner(parentStage);
         stage.show();

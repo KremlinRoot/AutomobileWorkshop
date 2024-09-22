@@ -8,13 +8,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 
 public class BudgetOrderFormView {
     private final BudgetOrder budgetOrder;
@@ -27,12 +25,6 @@ public class BudgetOrderFormView {
 
     public void show() {
         Stage stage = new Stage();
-        stage.getIcons().addAll(
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
-        );
         stage.setTitle(budgetOrder == null ? "Agregar Presupuesto" : "Editar Presupuesto");
 
         // Crear campos de entrada de datos
