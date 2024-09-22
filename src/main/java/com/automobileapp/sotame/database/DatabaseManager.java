@@ -788,6 +788,23 @@ public class DatabaseManager {
         }
     }
 
+    public static int getOrderByStatusForMainPage(String status) throws SQLException{
+        String countByStatusSQL = """
+                SELECT COUNT (*) FROM order_work WHERE statusOrder = ?; 
+                """;
+        try(Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(countByStatusSQL)) {
+            pstmt.setString(1, status);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                } else {
+                    return 0;
+                }
+            }
+        }
+
+    }
+
 
 // end class
 }

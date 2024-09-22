@@ -3,25 +3,51 @@
     src: url("fonts/OpenSans-Regular.ttf");
 }
 @font-face {
-    font-family: "Roboto";
+    font-family: "Roboto-Regular";
     src: url("fonts/Roboto-Regular.ttf");
 }
+@font-face {
+    font-family: "Roboto-Medium";
+    src: url("fonts/Roboto-Medium.ttf");
+}
+@font-face {
+    font-family: "Roboto-Bold";
+    src: url("fonts/Roboto-Bold.ttf");
+}
 .module-button {
-    -fx-background-color: #D32F2F;
+    -fx-background-color: #ffffff;
     -fx-background-radius: 5;
-    -fx-text-fill: white;
+    -fx-text-fill: #d53032;
     -fx-font-size: 13px;
     -fx-padding: 10px 20px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.1, 0, 0);
-    -fx-font-family: "Roboto";
-    -fx-max-height: 80px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 10, 0.15, 0, 0);
+    -fx-font-family: "Roboto-Medium";
+    -fx-font-weight: bold;
 
 
 }
 .module-button:hover {
-    -fx-background-color: #b22222;
+    -fx-background-color: #d0d0d0;
+    -fx-text-fill: #a40012;
 }
 .module-sidebar{
-    -fx-background-color: #cdcdcd;
+    -fx-background-color: #f04a45;
+}
+.welcome-message{
+    -fx-font-family: "OpenSans-Regular";
+    -fx-font-size: 34px;
+}
+.time-label{
+    -fx-font-family: "OpenSans-Regular";
+    -fx-font-size: 24px;
+    -fx-padding: 10px;
+}
+.time-label:hover{
+    -fx-text-fill: #4e4e4e;
+}
+.orders-labels{
+    -fx-font-family: "Roboto-Regular";
+    -fx-font-size: 18px;
+    -fx-text-fill: black;
 }

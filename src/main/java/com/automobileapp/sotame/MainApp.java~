@@ -188,12 +188,6 @@ public class MainApp extends Application {
         btnDeliveryDateModule.getStyleClass().add("module-button");
         btnBudgetModule.getStyleClass().add("module-button");
         sidebar.getStyleClass().add("module-sidebar");
-        // Orders label
-        pendingOrdersLabel.getStyleClass().add("orders-labels");
-        inProgressOrdersLabel.getStyleClass().add("orders-labels");
-        completedOrdersLabel.getStyleClass().add("orders-labels");
-        canceledOrdersLabel.getStyleClass().add("orders-labels");
-        deliveredOrdersLabel.getStyleClass().add("orders-labels");
         // Welcome to MecanikRed
         welcomeLabel.getStyleClass().add("welcome-message");
         timeLabel.getStyleClass().add("time-label");

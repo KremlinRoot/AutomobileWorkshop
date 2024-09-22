@@ -9,7 +9,6 @@ module com.automobileapp.sotame {
     requires com.h2database;
     requires java.sql;
     requires jfxtras.agenda;
-    requires java.desktop;
 
     opens com.automobileapp.sotame.models to javafx.base;
     exports com.automobileapp.sotame;
