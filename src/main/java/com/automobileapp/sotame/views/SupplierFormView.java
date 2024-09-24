@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -122,9 +123,15 @@ public class SupplierFormView {
                 System.err.println("Error al insertar o actualizar el proveedor: " + ex.getMessage());
             }
         });
+        // Cancel button
+        Button cancelButton = new Button("Cancelar");
+        cancelButton.getStyleClass().add("button-crud");
+        cancelButton.setOnAction(e -> stage.close());
+        // Layout buttons
+        HBox buttonLayout = new HBox(10, saveButton, cancelButton);
 
-        formLayout.add(saveButton, 1, 10);
-        Scene sceneSupplierForm = new Scene(formLayout, 450, 500);
+        formLayout.add(buttonLayout, 1, 11);
+        Scene sceneSupplierForm = new Scene(formLayout, 450, 400);
         // Loading and applying style
         String stylesheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
         sceneSupplierForm.getStylesheets().add(stylesheet);

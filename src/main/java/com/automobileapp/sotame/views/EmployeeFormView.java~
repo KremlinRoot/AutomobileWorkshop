@@ -103,7 +103,7 @@ public class EmployeeFormView {
         // Layout buttons
         HBox buttonLayout = new HBox(10, saveButton, cancelButton);
 
-        formLayout.add(buttonLayout, 1, 8);
+        formLayout.add(buttonLayout, 1, 11);
         Scene sceneFormEmployee = new Scene(formLayout,400,300);
         // Loading and applying CSS
         String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
