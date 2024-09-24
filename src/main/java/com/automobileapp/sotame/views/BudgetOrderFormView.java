@@ -70,9 +70,16 @@ public class BudgetOrderFormView {
         gridPane.add(new Label("Costo de Piezas:"), 0, 2);
         gridPane.add(partCostField, 1, 2);
 
+        // Styling grid pane
+        gridPane.getStyleClass().add("listview");
+
         // Botones de acción
         Button saveButton = new Button("Guardar");
         Button cancelButton = new Button("Cancelar");
+
+        // Styling buttons
+        saveButton.getStyleClass().add("button-crud");
+        cancelButton.getStyleClass().add("button-crud");
 
         // Evento del botón guardar
         saveButton.setOnAction(e -> {
@@ -107,6 +114,8 @@ public class BudgetOrderFormView {
 
         // Configurar escena y mostrarla
         Scene scene = new Scene(gridPane, 400, 200);
+        String styleSheet = getClass().getResource("/MainStyle.css").toExternalForm();
+        scene.getStylesheets().add(styleSheet);
         stage.setScene(scene);
         stage.showAndWait();
     }

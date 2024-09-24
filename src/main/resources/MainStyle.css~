@@ -22,6 +22,10 @@
     font-family: "Inter";
     src: url("fonts/Inter-Regular.ttf");
 }
+@font-face{
+    font-family: "Inter-Bold";
+    src: url("fonts/Inter-Bold.ttf");
+}
 .module-button {
     -fx-background-color: #ffffff;
     -fx-background-radius: 5;
@@ -32,8 +36,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 10, 0.15, 0, 0);
     -fx-font-family: "Roboto-Medium";
     -fx-font-weight: bold;
-
-
 }
 .module-button:hover {
     -fx-background-color: #d0d0d0;
@@ -44,7 +46,7 @@
 }
 .welcome-message{
     -fx-font-family: "QuickSilver";
-    -fx-font-size: 40z|px;
+    -fx-font-size: 40px;
 }
 .time-label{
     -fx-font-family: "OpenSans-Regular";
@@ -63,3 +65,23 @@
 .orders-labels:hover{
     -fx-text-fill: #cb2821;
 }
+.button-crud{
+    -fx-font-family: "Inter-Bold";
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-text-weight: bold;
+    -fx-background-color: #f04a45;
+    -fx-background-radius: 5;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 10, 0.15, 0, 0);
+}
+.button-crud:hover{
+    -fx-text-fill: #f6f6f6;
+    -fx-background-color: #ba0a20;
+}
+
+.listview{
+    -fx-background-color: #e7e6e6;
+}
+

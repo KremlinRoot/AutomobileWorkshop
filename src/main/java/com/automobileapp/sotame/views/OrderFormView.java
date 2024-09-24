@@ -89,6 +89,7 @@ public class OrderFormView {
 
         // Save button
         Button saveButton = new Button("Guardar");
+        saveButton.getStyleClass().add("button-crud");
         saveButton.setOnAction(e -> {
             // Collect data from text fields
             try {
@@ -143,15 +144,20 @@ public class OrderFormView {
 
         // Cancel button
         Button cancelButton = new Button("Cancelar");
+        cancelButton.getStyleClass().add("button-crud");
         cancelButton.setOnAction(e -> stage.close());
 
         // Layout buttons
         HBox buttonLayout = new HBox(10, saveButton, cancelButton);
         formLayout.add(buttonLayout, 1, 11);
+        formLayout.getStyleClass().add("listview");
 
         // Set the scene and show
-        Scene scene = new Scene(formLayout);
-        stage.setScene(scene);
+        Scene sceneOrderForm = new Scene(formLayout,800,600);
+        // adding and applying style
+        String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
+        sceneOrderForm.getStylesheets().add(styleSheet);
+        stage.setScene(sceneOrderForm);
         stage.showAndWait();
     }
 }

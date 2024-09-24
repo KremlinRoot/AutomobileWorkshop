@@ -81,7 +81,10 @@ public class SupplierListView {
         Button addButton = new Button("Agregar proveedor");
         Button editButton = new Button("Editar proveedor");
         Button deleteButton = new Button("Eliminar proveedor");
-
+        // Styling buttons
+        addButton.getStyleClass().add("button-crud");
+        editButton.getStyleClass().add("button-crud");
+        deleteButton.getStyleClass().add("button-crud");
         // Set up button events
         // Add button will open showSupplierForm
         addButton.setOnAction(e -> showSupplierForm(null));
@@ -118,17 +121,25 @@ public class SupplierListView {
 
         layout.setCenter(tableViewSupplier);
         layout.setBottom(buttonBox);
+        layout.getStyleClass().add("listview");
 
         // Set up scene
         Stage stage = new Stage();
         stage.setTitle("Módulo Proveedores");
+        // Setting icons
         stage.getIcons().addAll(
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
         );
-        stage.setScene(new Scene(layout, 800, 600));
+        // Creating scene
+        Scene sceneSupplierList = new Scene(layout, 1000, 600);
+        // Loading and applying CSS
+        String stylesheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
+        sceneSupplierList.getStylesheets().add(stylesheet);
+        // Setting scene
+        stage.setScene(sceneSupplierList);
         stage.initOwner(parentSateg);
         stage.show();
     }

@@ -72,6 +72,11 @@ public class EmployeeListView {
         Button editButton = new Button("Editar empleado");
         Button deleteButton = new Button("Eliminar empleado");
 
+        // Styling buttons
+        addButton.getStyleClass().add("button-crud");
+        editButton.getStyleClass().add("button-crud");
+        deleteButton.getStyleClass().add("button-crud");
+
         // set up button events
         // addbutton will open showEmployeeForm
         addButton.setOnAction(e -> showEmployeeForm(null));
@@ -108,6 +113,7 @@ public class EmployeeListView {
 
         layout.setCenter(tableViewEmployee);
         layout.setBottom(buttonBox);
+        layout.getStyleClass().add("listview");
 
         // set up scene and show it
         Stage stage = new Stage();
@@ -118,7 +124,13 @@ public class EmployeeListView {
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
         );
-        stage.setScene(new Scene(layout, 800, 600));
+        // Creating scene
+        Scene sceneEmployeeListView = new Scene(layout, 800, 600);
+        // Styling scene
+        String styleSheet = getClass().getResource("/MainStyle.css").toExternalForm();
+        sceneEmployeeListView.getStylesheets().add(styleSheet);
+        // Adding scene to stage
+        stage.setScene(sceneEmployeeListView);
         stage.initOwner(parentStage);
         stage.show();
     }

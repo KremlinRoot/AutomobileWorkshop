@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -17,6 +18,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class OrderListView {
@@ -99,6 +101,10 @@ public class OrderListView {
         Button addButton = new Button("Agregar órden");
         Button editButton = new Button("Editar órden");
         Button deleteButton = new Button("Eliminar órden");
+        // adding style to buttons
+        addButton.getStyleClass().add("button-crud");
+        editButton.getStyleClass().add("button-crud");
+        deleteButton.getStyleClass().add("button-crud");
         // set up button events
         addButton.setOnAction(event -> {
             // Abre el formulario de órdenes para agregar una nueva orden
@@ -144,10 +150,24 @@ public class OrderListView {
 
         layout.setCenter(tableViewOrder);
         layout.setBottom(buttonBox);
+        // Styling layout
+        layout.getStyleClass().add("listview");
         // set up scene and show it
         Stage stage = new Stage();
         stage.setTitle("Módulo de Órdenes de Trabajo");
-        stage.setScene(new Scene(layout, 1000, 600));
+        stage.getIcons().addAll(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
+        );
+        // Creating scene
+        Scene sceneOrderList = new Scene(layout, 1000, 600);
+        // Loading and applying CSS
+        String stylesheet = Objects.requireNonNull(getClass().getResource("/css/listview.css")).toExternalForm();
+        sceneOrderList.getStylesheets().add(stylesheet);
+        // Setting scene
+        stage.setScene(sceneOrderList);
         stage.initOwner(parentStage);
         stage.show();
     }

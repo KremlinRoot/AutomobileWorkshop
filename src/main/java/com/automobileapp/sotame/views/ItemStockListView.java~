@@ -63,16 +63,10 @@ public class ItemStockListView {
     public void show(Stage parentStage){
         BorderPane layout = new BorderPane();
         layout.setPadding(new Insets(10));
-        // Styling layout
-        layout.getStyleClass().add("listview");
         // Buttons to add, edit and delete items
         Button addButton = new Button("Añadir artículo");
         Button editButton = new Button("Editar artículo");
         Button deleteButton = new Button("Eliminar artículo");
-        // Styling buttons
-        addButton.getStyleClass().add("button-crud");
-        editButton.getStyleClass().add("button-crud");
-        deleteButton.getStyleClass().add("button-crud");
         // Set up action buttons
         addButton.setOnAction(e -> {
             showItemStockForm(null);
@@ -117,13 +111,7 @@ public class ItemStockListView {
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
         );
-        // Creating scene
-        Scene stockItemListScene = new Scene(layout, 800, 600);
-        // Loading styles
-        String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
-        stockItemListScene.getStylesheets().add(styleSheet);
-        // Adding scene to stage
-        stage.setScene(stockItemListScene);
+        stage.setScene(new Scene(layout, 800, 600));
         stage.initOwner(parentStage);
         stage.show();
     }

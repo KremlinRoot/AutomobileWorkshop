@@ -127,7 +127,7 @@ public class StockItemFormView {
         formLayout.add(buttonLayout, 1, 9);
 
         // Create scene
-        Scene sceneItemStockForm = new Scene(formLayout,400,350);
+        Scene sceneItemStockForm = new Scene(formLayout,350,400);
         // Styling scene
         String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
         sceneItemStockForm.getStylesheets().add(styleSheet);

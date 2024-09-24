@@ -80,6 +80,7 @@ public class SupplierFormView {
 
         // Botón guardar
         Button saveButton = new Button("Guardar");
+        saveButton.getStyleClass().add("button-crud");
         saveButton.setOnAction(e -> {
             try {
                 if (supplier == null) {
@@ -123,8 +124,11 @@ public class SupplierFormView {
         });
 
         formLayout.add(saveButton, 1, 10);
-        Scene scene = new Scene(formLayout, 450, 500);
-        stage.setScene(scene);
+        Scene sceneSupplierForm = new Scene(formLayout, 450, 500);
+        // Loading and applying style
+        String stylesheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
+        sceneSupplierForm.getStylesheets().add(stylesheet);
+        stage.setScene(sceneSupplierForm);
         stage.showAndWait();
     }
 }

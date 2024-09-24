@@ -8,11 +8,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class EmployeeFormView {
     // fields
@@ -27,12 +29,19 @@ public class EmployeeFormView {
     public void show(){
         Stage stage = new Stage();
         stage.setTitle(employee == null ? "Agregar Empleado" : "Editar Empleado");
+        stage.getIcons().addAll(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
+        );
         stage.initModality(Modality.APPLICATION_MODAL);
 
         GridPane formLayout = new GridPane();
         formLayout.setHgap(10);
         formLayout.setVgap(8);
         formLayout.setPadding(new Insets(10));
+        formLayout.getStyleClass().add("listview");
 
         // text fields
         // TextField idField = new TextField(employee != null ? String.valueOf(employee.getIdEmployee()) : "");
@@ -43,9 +52,7 @@ public class EmployeeFormView {
         TextField jobTitleField = new TextField(employee != null ? employee.getJobTitle():"");
         TextField workedHoursField = new TextField(employee != null ? String.valueOf(employee.getWorkedHours()):"");
 
-        // campos de texto
-        // formLayout.add(new Label("ID:"), 0, 0);
-        // formLayout.add(idField, 0, 0);
+        // Text fields
         formLayout.add(new Label("Nombre(s):"), 0, 0);
         formLayout.add(firstNameField, 1, 0);
         formLayout.add(new Label("Apellidos:"), 0, 1);
@@ -61,6 +68,7 @@ public class EmployeeFormView {
 
         // Botón guardar
         Button saveButton = new Button("Guardar");
+        saveButton.getStyleClass().add("button-crud");
         saveButton.setOnAction(e -> {
            try {
                double workedHours = Double.parseDouble(workedHoursField.getText());
@@ -88,8 +96,12 @@ public class EmployeeFormView {
         });
 
         formLayout.add(saveButton, 1, 6);
-        Scene scene = new Scene(formLayout,400,300);
-        stage.setScene(scene);
+        Scene sceneFormEmployee = new Scene(formLayout,400,300);
+        // Loading and applying CSS
+        String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
+        sceneFormEmployee.getStylesheets().add(styleSheet);
+        // Adding and showing scene
+        stage.setScene(sceneFormEmployee);
         stage.showAndWait();
     }
 

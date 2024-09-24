@@ -101,6 +101,10 @@ public class OrderListView {
         Button addButton = new Button("Agregar órden");
         Button editButton = new Button("Editar órden");
         Button deleteButton = new Button("Eliminar órden");
+        // adding style to buttons
+        addButton.getStyleClass().add("button-crud");
+        editButton.getStyleClass().add("button-crud");
+        deleteButton.getStyleClass().add("button-crud");
         // set up button events
         addButton.setOnAction(event -> {
             // Abre el formulario de órdenes para agregar una nueva orden
@@ -146,6 +150,8 @@ public class OrderListView {
 
         layout.setCenter(tableViewOrder);
         layout.setBottom(buttonBox);
+        // Styling layout
+        layout.getStyleClass().add("listview");
         // set up scene and show it
         Stage stage = new Stage();
         stage.setTitle("Módulo de Órdenes de Trabajo");
@@ -155,7 +161,13 @@ public class OrderListView {
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
         );
-        stage.setScene(new Scene(layout, 1000, 600));
+        // Creating scene
+        Scene sceneOrderList = new Scene(layout, 1000, 600);
+        // Loading and applying CSS
+        String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
+        sceneOrderList.getStylesheets().add(styleSheet);
+        // Setting scene
+        stage.setScene(sceneOrderList);
         stage.initOwner(parentStage);
         stage.show();
     }

@@ -61,11 +61,16 @@ public class BudgetListView {
     public void show(Stage parentStage) {
         BorderPane layout = new BorderPane();
         layout.setPadding(new Insets(10));
-
+        layout.getStyleClass().add("listview");
         // Botones de acciones
         Button addButton = new Button("Agregar Presupuesto");
         Button editButton = new Button("Editar Presupuesto");
         Button deleteButton = new Button("Eliminar Presupuesto");
+
+        // Styling buttons
+        addButton.getStyleClass().add("button-crud");
+        editButton.getStyleClass().add("button-crud");
+        deleteButton.getStyleClass().add("button-crud");
 
         // Configurar eventos de botones
         addButton.setOnAction(e -> showBudgetForm(null)); // Agregar presupuesto
@@ -109,7 +114,14 @@ public class BudgetListView {
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
         );
-        stage.setScene(new Scene(layout, 800, 600));
+
+        // Create scene
+        Scene sceneBudgetList = new Scene(layout,800,600);
+        // Load and apply CSS
+        String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
+        sceneBudgetList.getStylesheets().add(styleSheet);
+        // Adding scene to stage
+        stage.setScene(sceneBudgetList);
         stage.initOwner(parentStage);
         stage.show();
     }
