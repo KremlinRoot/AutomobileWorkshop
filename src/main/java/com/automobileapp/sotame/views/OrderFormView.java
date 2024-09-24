@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -18,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class OrderFormView {
     // Class variables
@@ -32,6 +34,12 @@ public class OrderFormView {
 
     public void show() {
         Stage stage = new Stage();
+        stage.getIcons().addAll(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
+        );
         stage.setTitle(order == null ? "Agregar órden" : "Editar órden");
         stage.initModality(Modality.WINDOW_MODAL);
 
@@ -81,6 +89,7 @@ public class OrderFormView {
 
         // Save button
         Button saveButton = new Button("Guardar");
+        saveButton.getStyleClass().add("button-crud");
         saveButton.setOnAction(e -> {
             // Collect data from text fields
             try {
@@ -135,15 +144,20 @@ public class OrderFormView {
 
         // Cancel button
         Button cancelButton = new Button("Cancelar");
+        cancelButton.getStyleClass().add("button-crud");
         cancelButton.setOnAction(e -> stage.close());
 
         // Layout buttons
         HBox buttonLayout = new HBox(10, saveButton, cancelButton);
         formLayout.add(buttonLayout, 1, 11);
+        formLayout.getStyleClass().add("listview");
 
         // Set the scene and show
-        Scene scene = new Scene(formLayout);
-        stage.setScene(scene);
+        Scene sceneOrderForm = new Scene(formLayout,800,600);
+        // adding and applying style
+        String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
+        sceneOrderForm.getStylesheets().add(styleSheet);
+        stage.setScene(sceneOrderForm);
         stage.showAndWait();
     }
 }

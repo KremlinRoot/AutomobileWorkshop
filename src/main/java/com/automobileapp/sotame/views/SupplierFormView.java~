@@ -130,7 +130,7 @@ public class SupplierFormView {
         // Layout buttons
         HBox buttonLayout = new HBox(10, saveButton, cancelButton);
 
-        formLayout.add(buttonLayout, 1, 11);
+        formLayout.add(buttonLayout, 1, 12);
         Scene sceneSupplierForm = new Scene(formLayout, 450, 400);
         // Loading and applying style
         String stylesheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();

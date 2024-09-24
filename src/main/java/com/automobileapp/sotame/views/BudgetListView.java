@@ -10,11 +10,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class BudgetListView {
     private final ObservableList<BudgetOrder> budgetOrderList;
@@ -31,6 +33,9 @@ public class BudgetListView {
         tableViewBudgetOrder = new TableView<>(budgetOrderList);
 
         // Definir columnas de la tabla reflejando los atributos de BudgetOrder
+        TableColumn<BudgetOrder, Integer> idBudgetOrderColumn = new TableColumn<>("ID");
+        idBudgetOrderColumn.setCellValueFactory(new PropertyValueFactory<>("idBudgetOrder"));
+
         TableColumn<BudgetOrder, String> orderNumberColumn = new TableColumn<>("Número de Orden");
         orderNumberColumn.setCellValueFactory(new PropertyValueFactory<>("orderNumber")); // Aquí necesitas un getter en Order
 
@@ -50,17 +55,22 @@ public class BudgetListView {
         });
 
         // Añadir columnas a la tabla
-        tableViewBudgetOrder.getColumns().addAll(orderNumberColumn, laborHoursColumn, partCostColumn, totalCostColumn);
+        tableViewBudgetOrder.getColumns().addAll(idBudgetOrderColumn,orderNumberColumn, laborHoursColumn, partCostColumn, totalCostColumn);
     }
 
     public void show(Stage parentStage) {
         BorderPane layout = new BorderPane();
         layout.setPadding(new Insets(10));
-
+        layout.getStyleClass().add("listview");
         // Botones de acciones
         Button addButton = new Button("Agregar Presupuesto");
         Button editButton = new Button("Editar Presupuesto");
         Button deleteButton = new Button("Eliminar Presupuesto");
+
+        // Styling buttons
+        addButton.getStyleClass().add("button-crud");
+        editButton.getStyleClass().add("button-crud");
+        deleteButton.getStyleClass().add("button-crud");
 
         // Configurar eventos de botones
         addButton.setOnAction(e -> showBudgetForm(null)); // Agregar presupuesto
@@ -98,7 +108,20 @@ public class BudgetListView {
         // Configurar escena y mostrarla
         Stage stage = new Stage();
         stage.setTitle("Módulo Presupuestos");
-        stage.setScene(new Scene(layout, 800, 600));
+        stage.getIcons().addAll(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
+        );
+
+        // Create scene
+        Scene sceneBudgetList = new Scene(layout,800,600);
+        // Load and apply CSS
+        String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
+        sceneBudgetList.getStylesheets().add(styleSheet);
+        // Adding scene to stage
+        stage.setScene(sceneBudgetList);
         stage.initOwner(parentStage);
         stage.show();
     }

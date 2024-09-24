@@ -776,6 +776,16 @@ public class DatabaseManager {
             } else {
                 System.out.println("Se actualizo el presupuesto con idBudgetOrder: " + budgetOrder.getIdBudgetOrder());
                 // Verificar que el cambio se realizó
+                try (PreparedStatement verifyStmt = connection.prepareStatement("SELECT * FROM budget_order WHERE idBudgetOrder = ?")) {
+                    verifyStmt.setInt(1, budgetOrder.getIdBudgetOrder());
+                    try (ResultSet rs = verifyStmt.executeQuery()) {
+                        if (rs.next()) {
+                            System.out.println("LaborHours: " + rs.getDouble("laborHours") + ", PartCost: " + rs.getDouble("partCost"));
+                        } else {
+                            System.out.println("No se encontró el presupuesto después de actualizar.");
+                        }
+                    }
+                }
             }
         }
     }
