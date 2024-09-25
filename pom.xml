@@ -140,14 +140,15 @@
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
               <noHeaderFiles>true</noHeaderFiles>
+              <archive>
+                <manifest>
+                  <addClasspath>true</addClasspath>
+                  <mainClass>com.automobileapp.sotame.MainApp</mainClass>
+                </manifest>
+              </archive>
               <options>
-                <option>--add-modules</option>
-                <option>javafx.controls,javafx.fxml,javafx.web,javafx.swing</option>
                 <option>--add-reads</option>
                 <option>com.h2database=ALL-UNNAMED</option>
-                <!-- Include the SQLite JAR -->
-                <option>--add-reads</option>
-                <option>sqlite.jdbc=ALL-UNNAMED</option>
               </options>
               <classpath>
                 <path>lib/sqlite-jdbc:3.42.0.0</path>

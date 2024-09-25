@@ -1,0 +1,8 @@
+Generate Windows msi installer:
+
+jpackage --name "MecanikRed (RedFierrera)" --app-version "1.0" --input "out/artifacts/sotame_jar" --main-jar "sotame.jar" --main-class "com.automobileapp.sotame.App" --module-path "C:\Program Files\
+Java\javafx-jmods-22.0.2" --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.swing,java.base,java.sql --icon "src/main/resources/icons/wrench-64.ico" --type "msi" --win-dir-chooser --win-menu --win-shortcut --vendor "Ing. Daniel Zarco" --install-dir "\RedFierrera\MecanikRed" --verbose
+
+Generate MacOSX DMG into MacOSX (not generate into Windows):
+jpackage --name "MecanikRed (RedFierrera)" --app-version "1.0" --input "out/artifacts/sotame_jar" --main-jar "sotame.jar" --main-class "com.automobileapp.sotame.App" --module-path "C:\Program Files\
+Java\javafx-jmods-22.0.2" --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.swing,java.base,java.sql --icon "src/main/resources/icons/wrench-64.ico" --type "dmg" --vendor "Ing. Daniel Zarco" --verbose
