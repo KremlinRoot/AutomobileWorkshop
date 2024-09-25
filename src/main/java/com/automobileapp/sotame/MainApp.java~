@@ -102,7 +102,7 @@ public class MainApp extends Application {
 
         // Create buttons for modules
         Button btnEmployeeModule = new Button("Empleados");
-        Button btnOrdersModule = new Button("Automóviles");
+        Button btnOrdersModule = new Button("Autos");
         Button btnManageStockModule = new Button("Control de Stock");
         Button btnSuppliersModule = new Button("Proveedores");
         Button btnDeliveryDateModule = new Button("Fechas de Entrega");
@@ -249,11 +249,11 @@ public class MainApp extends Application {
                     int canceledOrders = DatabaseManager.getOrderByStatusForMainPage(String.valueOf(StatusOrder.CANCELADO));
                     int deliveredOrders = DatabaseManager.getOrderByStatusForMainPage(String.valueOf(StatusOrder.ENTREGADO));
                     Platform.runLater(() -> {
-                        pendingOrdersLabel.setText("AUTOMOVILES PENDIENTES: " + pendingOrders);
-                        inProgressOrdersLabel.setText("AUTOMOVILES EN PROGESO: " + inProgressOrders);
-                        completedOrdersLabel.setText("AUTOMOVILES COMPLETADAS: " + completedOrders);
-                        canceledOrdersLabel.setText("AUTOMOVILES CANCELADAS: " + canceledOrders);
-                        deliveredOrdersLabel.setText("AUTOMOVILES ENTREGADAS: " + deliveredOrders);
+                        pendingOrdersLabel.setText("ORDENES PENDIENTES: " + pendingOrders);
+                        inProgressOrdersLabel.setText("ORDENES EN PROGESO: " + inProgressOrders);
+                        completedOrdersLabel.setText("ORDENES COMPLETADAS: " + completedOrders);
+                        canceledOrdersLabel.setText("ORDENES CANCELADAS: " + canceledOrders);
+                        deliveredOrdersLabel.setText("ORDENES ENTREGADAS: " + deliveredOrders);
                     });
                 } catch (SQLException e)
                 {
