@@ -1,0 +1,163 @@
+package com.automobileapp.sotame.views;
+
+import com.automobileapp.sotame.database.DatabaseManager;
+import com.automobileapp.sotame.models.Automobile;
+import com.automobileapp.sotame.models.Customer;
+import com.automobileapp.sotame.models.Order;
+import com.automobileapp.sotame.models.StatusOrder;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+
+public class OrderFormView {
+    // Class variables
+    private final Order order;
+    private final ObservableList<Order> orderList;
+
+    // Constructor
+    public OrderFormView(Order order, ObservableList<Order> orderList) {
+        this.order = order;
+        this.orderList = orderList;
+    }
+
+    public void show() {
+        Stage stage = new Stage();
+        stage.getIcons().addAll(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
+        );
+        stage.setTitle(order == null ? "Agregar órden" : "Editar órden");
+        stage.initModality(Modality.WINDOW_MODAL);
+
+        GridPane formLayout = new GridPane();
+        formLayout.setHgap(10);
+        formLayout.setVgap(8);
+        formLayout.setPadding(new Insets(10));
+
+        // Text fields
+        TextField dateOrder = new TextField(order != null ? order.getOrderDate().format(DateTimeFormatter.ISO_DATE) : "");
+        TextField estimatedCompletionDate = new TextField(order != null ? order.getEstimatedCompletionDate().format(DateTimeFormatter.ISO_DATE) : "");
+        TextArea workDescription = new TextArea(order != null ? order.getWorkDescription() : "");
+        workDescription.setWrapText(true);
+        TextField totalCost = new TextField(order != null ? String.valueOf(order.getTotalCost()) : "");
+        ComboBox<StatusOrder> statusOrderComboBox = new ComboBox<>(FXCollections.observableArrayList(StatusOrder.values())); // Create a list of status values
+        statusOrderComboBox.setValue(order != null ? order.getStatusOrder() : StatusOrder.PENDIENTE); // Default value
+        TextField automobileManufacturer = new TextField(order != null ? order.getAutomobileOfOrder().getManufacturer() : "");
+        TextField automobileModel = new TextField(order != null ? order.getAutomobileOfOrder().getModel() : "");
+        TextField automobileYear = new TextField(order != null ? String.valueOf(order.getAutomobileOfOrder().getYearManufactured()) : "");
+        TextField automobilePlates = new TextField(order != null ? order.getAutomobileOfOrder().getNumberPlate() : "");
+        TextField customerName = new TextField(order != null ? order.getCustomerOfOrder().getFirstNameCustomer() : "");
+        TextField customerLastName = new TextField(order != null ? order.getCustomerOfOrder().getLastNameCustomer() : "");
+
+        // Add labels and text fields to the grid
+        formLayout.add(new Label("Fecha de la Órden:"), 0, 0);
+        formLayout.add(dateOrder, 1, 0);
+        formLayout.add(new Label("Fecha estimada de terminación:"), 0, 1);
+        formLayout.add(estimatedCompletionDate, 1, 1);
+        formLayout.add(new Label("Descripción del trabajo:"), 0, 2);
+        formLayout.add(workDescription, 1, 2);
+        formLayout.add(new Label("Total de la orden:"), 0, 3);
+        formLayout.add(totalCost, 1, 3);
+        formLayout.add(new Label("Estado de la órden:"), 0, 4);
+        formLayout.add(statusOrderComboBox, 1, 4);
+        formLayout.add(new Label("Fabricante del automóvil:"), 0, 5);
+        formLayout.add(automobileManufacturer, 1, 5);
+        formLayout.add(new Label("Modelo del automóvil:"), 0, 6);
+        formLayout.add(automobileModel, 1, 6);
+        formLayout.add(new Label("Año del automóvil:"), 0, 7);
+        formLayout.add(automobileYear, 1, 7);
+        formLayout.add(new Label("Patente del automóvil:"), 0, 8);
+        formLayout.add(automobilePlates, 1, 8);
+        formLayout.add(new Label("Nombre del cliente:"), 0, 9);
+        formLayout.add(customerName, 1, 9);
+        formLayout.add(new Label("Apellido del cliente:"), 0, 10);
+        formLayout.add(customerLastName, 1, 10);
+
+        // Save button
+        Button saveButton = new Button("Guardar");
+        saveButton.getStyleClass().add("button-crud");
+        saveButton.setOnAction(e -> {
+            // Collect data from text fields
+            try {
+                LocalDate orderDate = LocalDate.parse(dateOrder.getText(), DateTimeFormatter.ISO_DATE);
+                LocalDate estimatedDate = LocalDate.parse(estimatedCompletionDate.getText(), DateTimeFormatter.ISO_DATE);
+                double cost = Double.parseDouble(totalCost.getText());
+                StatusOrder orderStatus = statusOrderComboBox.getValue();
+
+                // Creating automobile
+                Automobile automobile = new Automobile(0,automobileManufacturer.getText(),
+                        automobileModel.getText(),automobilePlates.getText(), automobileYear.getText());
+                int idAutomobile = DatabaseManager.insertAutomobileIntoNewOrderForm(automobile);
+                automobile.setIdAutomobile(idAutomobile);
+
+
+                // Retrieve customer details
+                Customer customer = new Customer(0, customerName.getText(), customerLastName.getText());
+                int idCustomer = DatabaseManager. insertCustomerIntoNewOrderForm(customer);
+                customer.setIdCustomer(idCustomer);
+                if (order == null) { // Add new order
+                    Order newOrder = new Order(
+                            0, // idOrder
+                            "ORD-" + System.currentTimeMillis(), // orderNumber
+                            orderDate, // Fecha de la orden
+                            estimatedDate, // Fecha estimada de entrega
+                            workDescription.getText(), // Descripción del trabajo
+                            cost, // Costo total
+                            orderStatus, // Estado de la orden
+                            automobile, // Automóvil
+                            customer
+                    );
+
+                    int idNewOrder = DatabaseManager.insertOrder(newOrder);
+                    newOrder.setIdOrder(idNewOrder);
+                    orderList.add(newOrder);
+                } else { // Update existing order
+                    order.setOrderDate(orderDate);
+                    order.setEstimatedCompletionDate(estimatedDate);
+                    order.setWorkDescription(workDescription.getText());
+                    order.setTotalCost(cost);
+                    order.setStatusOrder(orderStatus);
+                    order.setAutomobileOfOrder(automobile);
+                    order.setCustomerOfOrder(customer);
+                    // Update automobile and customer details as needed
+                    DatabaseManager.updateOrder(order);
+                }
+                stage.close();
+            } catch (Exception ex) {
+                System.err.println("Error saving order: " + ex.getMessage());
+            }
+        });
+
+        // Cancel button
+        Button cancelButton = new Button("Cancelar");
+        cancelButton.getStyleClass().add("button-crud");
+        cancelButton.setOnAction(e -> stage.close());
+
+        // Layout buttons
+        HBox buttonLayout = new HBox(10, saveButton, cancelButton);
+        formLayout.add(buttonLayout, 1, 11);
+        formLayout.getStyleClass().add("listview");
+
+        // Set the scene and show
+        Scene sceneOrderForm = new Scene(formLayout,800,600);
+        // adding and applying style
+        String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
+        sceneOrderForm.getStylesheets().add(styleSheet);
+        stage.setScene(sceneOrderForm);
+        stage.showAndWait();
+    }
+}
