@@ -4,12 +4,17 @@ import com.automobileapp.sotame.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager {
-    private static final String DB_URL = "jdbc:h2:./sotameDB;AUTO_SERVER=TRUE";
+    // Get AppData path
+    private static final String APP_DATA_PATH = System.getenv("LOCALAPPDATA");
+    // Build path inside APPDATA
+    private static final String DB_PATH = Paths.get(APP_DATA_PATH,"RedFierrera","MecanikRed","mecanikred.db").toString();
+    private static final String DB_URL = "jdbc:h2:"+DB_PATH+";AUTO_SERVER=TRUE";
     private static final String DB_USER = "mecanikred";
     private static final String DB_PASSWORD = "admin";
 
