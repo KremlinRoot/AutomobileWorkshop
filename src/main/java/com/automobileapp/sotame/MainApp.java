@@ -102,7 +102,7 @@ public class MainApp extends Application {
 
         // Create buttons for modules
         Button btnEmployeeModule = new Button("Empleados");
-        Button btnOrdersModule = new Button("Órdenes");
+        Button btnOrdersModule = new Button("Automóviles");
         Button btnManageStockModule = new Button("Control de Stock");
         Button btnSuppliersModule = new Button("Proveedores");
         Button btnDeliveryDateModule = new Button("Fechas de Entrega");
@@ -139,11 +139,11 @@ public class MainApp extends Application {
 
         // Labels for orders
         processForUpdateOrdeLabelsInMainPage();
-        pendingOrdersLabel = new Label("ORDENES PENDIENTES: 0");
-        inProgressOrdersLabel = new Label("ORDENES EN PROGRESO: 0");
-        completedOrdersLabel = new Label("ORDENES COMPLETADAS: 0");
-        canceledOrdersLabel = new Label("ORDENES CANCELADAS: 0");
-        deliveredOrdersLabel = new Label("ORDENES ENTREGADAS: 0");
+        pendingOrdersLabel = new Label("AUTOMOVILES PENDIENTES: 0");
+        inProgressOrdersLabel = new Label("AUTOMOVILES EN PROGRESO: 0");
+        completedOrdersLabel = new Label("AUTOMOVILES COMPLETADAS: 0");
+        canceledOrdersLabel = new Label("AUTOMOVILES CANCELADAS: 0");
+        deliveredOrdersLabel = new Label("AUTOMOVILES ENTREGADAS: 0");
 
         // Create layout for main content
         VBox mainContent = new VBox(10, welcomeLabel, timeLabel, pendingOrdersLabel, inProgressOrdersLabel, completedOrdersLabel, canceledOrdersLabel, deliveredOrdersLabel);
@@ -249,11 +249,11 @@ public class MainApp extends Application {
                     int canceledOrders = DatabaseManager.getOrderByStatusForMainPage(String.valueOf(StatusOrder.CANCELADO));
                     int deliveredOrders = DatabaseManager.getOrderByStatusForMainPage(String.valueOf(StatusOrder.ENTREGADO));
                     Platform.runLater(() -> {
-                        pendingOrdersLabel.setText("ORDENES PENDIENTES: " + pendingOrders);
-                        inProgressOrdersLabel.setText("ORDENES EN PROGESO: " + inProgressOrders);
-                        completedOrdersLabel.setText("ORDENES COMPLETADAS: " + completedOrders);
-                        canceledOrdersLabel.setText("ORDENES CANCELADAS: " + canceledOrders);
-                        deliveredOrdersLabel.setText("ORDENES ENTREGADAS: " + deliveredOrders);
+                        pendingOrdersLabel.setText("AUTOMOVILES PENDIENTES: " + pendingOrders);
+                        inProgressOrdersLabel.setText("AUTOMOVILES EN PROGESO: " + inProgressOrders);
+                        completedOrdersLabel.setText("AUTOMOVILES COMPLETADAS: " + completedOrders);
+                        canceledOrdersLabel.setText("AUTOMOVILES CANCELADAS: " + canceledOrders);
+                        deliveredOrdersLabel.setText("AUTOMOVILES ENTREGADAS: " + deliveredOrders);
                     });
                 } catch (SQLException e)
                 {

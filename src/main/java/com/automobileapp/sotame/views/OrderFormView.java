@@ -40,7 +40,7 @@ public class OrderFormView {
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-32.png"))),
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-64.png")))
         );
-        stage.setTitle(order == null ? "Agregar órden" : "Editar órden");
+        stage.setTitle(order == null ? "Agregar automóvil" : "Editar automóvil");
         stage.initModality(Modality.WINDOW_MODAL);
 
         GridPane formLayout = new GridPane();
@@ -64,15 +64,15 @@ public class OrderFormView {
         TextField customerLastName = new TextField(order != null ? order.getCustomerOfOrder().getLastNameCustomer() : "");
 
         // Add labels and text fields to the grid
-        formLayout.add(new Label("Fecha de la Órden:"), 0, 0);
+        formLayout.add(new Label("Fecha de ingreso:"), 0, 0);
         formLayout.add(dateOrder, 1, 0);
         formLayout.add(new Label("Fecha estimada de terminación:"), 0, 1);
         formLayout.add(estimatedCompletionDate, 1, 1);
         formLayout.add(new Label("Descripción del trabajo:"), 0, 2);
         formLayout.add(workDescription, 1, 2);
-        formLayout.add(new Label("Total de la orden:"), 0, 3);
+        formLayout.add(new Label("Total del automóvil:"), 0, 3);
         formLayout.add(totalCost, 1, 3);
-        formLayout.add(new Label("Estado de la órden:"), 0, 4);
+        formLayout.add(new Label("Estado del automóvil:"), 0, 4);
         formLayout.add(statusOrderComboBox, 1, 4);
         formLayout.add(new Label("Fabricante del automóvil:"), 0, 5);
         formLayout.add(automobileManufacturer, 1, 5);
