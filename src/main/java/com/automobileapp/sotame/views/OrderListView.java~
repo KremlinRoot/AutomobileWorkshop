@@ -36,7 +36,7 @@ public class OrderListView {
         // Defining columns by Order class variables
         TableColumn<Order,Integer> idOrder = new TableColumn<>("ID");
         idOrder.setCellValueFactory(new PropertyValueFactory<>("idOrder"));
-        TableColumn<Order, String> orderNumber = new TableColumn<>("Número de Órden");
+        TableColumn<Order, String> orderNumber = new TableColumn<>("Número de Auto");
         orderNumber.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
         TableColumn<Order,String> dateOrder = new TableColumn<>("Fecha");
         dateOrder.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
@@ -63,17 +63,17 @@ public class OrderListView {
         });
         TableColumn<Order, String> totalCost = new TableColumn<>("Costo Total");
         totalCost.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
-        TableColumn<Order, String> status = new TableColumn<>("Estado de la Órden");
+        TableColumn<Order, String> status = new TableColumn<>("Estado del Automóvil");
         status.setCellValueFactory(new PropertyValueFactory<>("statusOrder"));
-        TableColumn<Order, String> automobileId = new TableColumn<>("ID del Automovil");
+        TableColumn<Order, String> automobileId = new TableColumn<>("ID del Automóvil");
         automobileId.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getAutomobileOfOrder().getIdAutomobile())));
-        TableColumn<Order, String> automobileManufacturer = new TableColumn<>("Fabricante del Automovil");
+        TableColumn<Order, String> automobileManufacturer = new TableColumn<>("Fabricante del Automóvil");
         automobileManufacturer.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAutomobileOfOrder().getManufacturer()));
-        TableColumn<Order, String> automobileModel = new TableColumn<>("Modelo del Automovil");
+        TableColumn<Order, String> automobileModel = new TableColumn<>("Modelo del Automóvil");
         automobileModel.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAutomobileOfOrder().getModel()));
-        TableColumn<Order, String> automobileYear = new TableColumn<>("Año del Automovil");
+        TableColumn<Order, String> automobileYear = new TableColumn<>("Año del Automóvil");
         automobileYear.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getAutomobileOfOrder().getYearManufactured())));
-        TableColumn<Order,String> automobilePlates = new TableColumn<>("Patente del Automovil");
+        TableColumn<Order,String> automobilePlates = new TableColumn<>("Patente del Automóvil");
         automobilePlates.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAutomobileOfOrder().getNumberPlate()));
         TableColumn<Order,String> customerName = new TableColumn<>("Nombre(s) del Cliente");
         customerName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomerOfOrder().getFirstNameCustomer()));
@@ -98,9 +98,9 @@ public class OrderListView {
         BorderPane layout = new BorderPane();
         layout.setPadding(new Insets(10));
         // buttons to add, edit and deleter employees
-        Button addButton = new Button("Agregar órden");
-        Button editButton = new Button("Editar órden");
-        Button deleteButton = new Button("Eliminar órden");
+        Button addButton = new Button("Agregar automóvil");
+        Button editButton = new Button("Editar automóvil");
+        Button deleteButton = new Button("Eliminar automóvil");
         // adding style to buttons
         addButton.getStyleClass().add("button-crud");
         editButton.getStyleClass().add("button-crud");
@@ -121,7 +121,7 @@ public class OrderListView {
                 tableViewOrder.refresh();
             } else {
                 // Muestra un mensaje de alerta si no se ha seleccionado ninguna orden
-                showAlert("Editar Orden", "Por favor, selecciona una orden para editar.");
+                showAlert("Editar Automóvil", "Por favor, selecciona un automóvil para editar.");
             }
         });
         deleteButton.setOnAction(event -> {
@@ -129,19 +129,19 @@ public class OrderListView {
             Order selectedOrder = tableViewOrder.getSelectionModel().getSelectedItem();
             if (selectedOrder != null) {
                 // Pide confirmación antes de eliminar
-                boolean confirmed = showConfirmation("Eliminar Orden", "¿Estás seguro de que deseas eliminar esta orden?");
+                boolean confirmed = showConfirmation("Eliminar automóvil", "¿Estás seguro de que deseas eliminar este automóvil?");
                 if (confirmed) {
                     try {
                         // Elimina la orden de la base de datos y de la lista
                         DatabaseManager.deleteOrder(selectedOrder.getIdOrder());
                         orderList.remove(selectedOrder);
                     } catch (SQLException e) {
-                        showAlert("Error al eliminar", "Hubo un error al eliminar la orden: " + e.getMessage());
+                        showAlert("Error al eliminar", "Hubo un error al eliminar el automóvil: " + e.getMessage());
                     }
                 }
             } else {
                 // Muestra un mensaje de alerta si no se ha seleccionado ninguna orden
-                showAlert("Eliminar Orden", "Por favor, selecciona una orden para eliminar.");
+                showAlert("Eliminar automóvil", "Por favor, selecciona un automóvil para eliminar.");
             }
         });
         // HBox for buttons
@@ -154,7 +154,7 @@ public class OrderListView {
         layout.getStyleClass().add("listview");
         // set up scene and show it
         Stage stage = new Stage();
-        stage.setTitle("Módulo de Órdenes de Trabajo");
+        stage.setTitle("Módulo de Automóviles");
         stage.getIcons().addAll(
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-16.png"))),
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/wrench-24.png"))),
@@ -164,8 +164,8 @@ public class OrderListView {
         // Creating scene
         Scene sceneOrderList = new Scene(layout, 1000, 600);
         // Loading and applying CSS
-        String stylesheet = Objects.requireNonNull(getClass().getResource("/css/listview.css")).toExternalForm();
-        sceneOrderList.getStylesheets().add(stylesheet);
+        String styleSheet = Objects.requireNonNull(getClass().getResource("/MainStyle.css")).toExternalForm();
+        sceneOrderList.getStylesheets().add(styleSheet);
         // Setting scene
         stage.setScene(sceneOrderList);
         stage.initOwner(parentStage);
